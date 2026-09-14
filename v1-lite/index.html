@@ -42,6 +42,12 @@
     .item h3 { margin: 0; color: var(--ink); font-size: 1.05rem; letter-spacing: .04em; }
     .meta { color: var(--muted); font-size: .9rem; margin: 2px 0 6px; }
     .item ul { margin: 0; padding-left: 18px; }
+    .version-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; padding: 6px 16px; font: 500 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: #0b0c0f; color: #9aa1ab; }
+    .version-bar a { color: #d7dade; text-decoration: none; padding: 3px 10px; border-radius: 999px; }
+    .version-bar a:hover { color: #fff; background: rgba(255,255,255,.08); }
+    .version-bar a[aria-current="page"] { background: var(--accent); color: #1a1c20; font-weight: 700; }
+    .vb-label { margin-right: 4px; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; }
+    @media (max-width: 480px) { .vb-label { display: none; } }
     @media (max-width: 760px) {
       .page { grid-template-columns: 1fr; margin: 0; }
       .photo { max-width: 220px; margin: 0 auto; }
@@ -50,12 +56,21 @@
     }
     @media print {
       body { background: #fff; }
+      .version-bar { display: none; }
       .page { margin: 0; box-shadow: none; }
       aside, header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
 </head>
 <body>
+  <nav class="version-bar" aria-label="Site versions">
+    <span class="vb-label">Site version</span>
+    <a href="../">Interactive</a>
+    <a href="../v2-standard/">Standard</a>
+    <a href="./" aria-current="page">Lite</a>
+    <a href="../versions/">Compare all</a>
+  </nav>
+
   <div class="page">
     <aside>
       <img class="photo" src="../assets/photo.png" alt="Portrait of Tam Kok Yan" width="244" height="305">

@@ -52,6 +52,14 @@ h1, h2, h3 { line-height: 1.2; margin: 0; }
 .skip { position: absolute; left: -999px; top: 8px; background: var(--accent); color: var(--accent-ink); padding: 8px 12px; z-index: 100; }
 .skip:focus { left: 8px; }
 
+/* Version switcher */
+.version-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; padding: 6px 16px; font: 500 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: #0b0c0f; color: #9aa1ab; }
+.version-bar a { color: #d7dade; text-decoration: none; padding: 3px 10px; border-radius: 999px; transition: background .2s, color .2s; }
+.version-bar a:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.version-bar a[aria-current="page"] { background: #f4d442; color: #1a1c20; font-weight: 700; }
+.vb-label { margin-right: 4px; text-transform: uppercase; letter-spacing: .08em; font-size: 11px; }
+@media (max-width: 480px) { .vb-label { display: none; } }
+
 /* Nav */
 .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .3s; }
 .nav.scrolled { border-bottom-color: var(--line); }
@@ -157,7 +165,7 @@ h1, h2, h3 { line-height: 1.2; margin: 0; }
 }
 
 @media print {
-  .nav, .to-top, .cta, .hero-photo::before { display: none; }
+  .nav, .version-bar, .to-top, .cta, .hero-photo::before { display: none; }
   .reveal { opacity: 1; transform: none; }
   .section { padding: 24px 0; }
 }
