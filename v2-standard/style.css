@@ -114,6 +114,10 @@ h1, h2, h3 { line-height: 1.2; margin: 0; }
 .gpa { margin: 0 !important; }
 .gpa strong { color: var(--text); font-size: 1.4rem; margin-left: 6px; }
 
+/* Skill pills */
+.pills { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.pills li { padding: 8px 14px; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--line); font-size: .9rem; font-weight: 500; }
+
 /* Skill meters */
 .meters { list-style: none; margin: 0; padding: 0; }
 .meters li { display: grid; grid-template-columns: 1fr auto; row-gap: 6px; margin-bottom: 18px; }

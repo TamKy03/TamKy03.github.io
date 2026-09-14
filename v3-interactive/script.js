@@ -44,7 +44,7 @@
   onScroll();
 
   /* ---------- Typing roles ---------- */
-  const roles = ['Data Science undergraduate', 'Former Code Instructor', 'Programme Representative', 'Weiqi player'];
+  const roles = ['ERP Technical Consultant', 'Data Science graduate', 'Oracle ERP Cloud', 'Former Code Instructor', 'Weiqi player'];
   const typed = $('#typed');
   if (!reducedMotion) {
     let r = 0, i = roles[0].length, deleting = true;
@@ -66,8 +66,16 @@
     d.innerHTML = Array.from({ length: 5 }, (_, k) => `<i class="${k < level ? 'on' : ''}"></i>`).join('');
   });
 
+  // "YYYY-MM" counts months from that month up to now (inclusive), so the stat never goes stale
+  const monthsSince = (ym) => {
+    const [y, m] = ym.split('-').map(Number);
+    const now = new Date();
+    return (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m) + 1;
+  };
+
   const countUp = (el) => {
-    const target = Number(el.dataset.count);
+    const raw = el.dataset.count;
+    const target = raw.includes('-') ? monthsSince(raw) : Number(raw);
     const decimals = Number(el.dataset.decimals || 0);
     if (reducedMotion) { el.textContent = target.toFixed(decimals); return; }
     const start = performance.now();
