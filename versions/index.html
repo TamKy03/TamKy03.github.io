@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tam Kok Yan — Resume site versions</title>
+  <meta name="description" content="Three versions of Tam Kok Yan's personal site, from lightest to most interactive.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tam Kok Yan">
+  <meta property="og:url" content="https://tamky03.github.io/versions/">
+  <meta property="og:title" content="Tam Kok Yan — Site versions">
+  <meta property="og:description" content="Three versions of Tam Kok Yan's personal site, from lightest to most interactive.">
+  <meta property="og:image" content="https://tamky03.github.io/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root { --ink: #2b2f36; --accent: #f4d442; --paper: #f7f6f2; --muted: #6b7079; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--paper); color: var(--ink); padding: 48px 20px; }
+    main { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 .25rem; letter-spacing: .02em; }
+    h1 span { background: linear-gradient(transparent 60%, var(--accent) 60%); }
+    p.lead { color: var(--muted); margin: 0 0 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    a.card { display: flex; flex-direction: column; gap: .5rem; padding: 22px; border-radius: 14px; background: #fff; color: inherit; text-decoration: none; border: 1px solid #e4e2dc; transition: transform .15s, box-shadow .15s; }
+    a.card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(43,47,54,.12); }
+    .tag { align-self: flex-start; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--accent); padding: 3px 9px; border-radius: 99px; }
+    h2 { margin: 0; font-size: 1.25rem; }
+    ul { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: .92rem; }
+    .go { margin-top: auto; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1><span>Tam Kok Yan</span> — resume site</h1>
+    <p class="lead">Three versions of the same content, from lightest to most interactive.</p>
+    <div class="grid">
+      <a class="card" href="../v1-lite/">
+        <span class="tag">V1 · Lite</span>
+        <h2>One-page resume</h2>
+        <ul>
+          <li>A single HTML file with no JavaScript</li>
+          <li>No web fonts and nothing loaded from other sites</li>
+          <li>Print-ready layout (Ctrl+P gives a clean page)</li>
+        </ul>
+        <span class="go">Open →</span>
+      </a>
+      <a class="card" href="../v2-standard/">
+        <span class="tag">V2 · Standard</span>
+        <h2>Personal portfolio</h2>
+        <ul>
+          <li>Sticky nav, mobile menu, section highlight</li>
+          <li>Light / dark theme, scroll reveal</li>
+          <li>Timeline, skill meters, back-to-top</li>
+        </ul>
+        <span class="go">Open →</span>
+      </a>
+      <a class="card" href="../">
+        <span class="tag">V3 · Interactive · Main site</span>
+        <h2>Interactive showcase</h2>
+        <ul>
+          <li>Animated data-network hero, typing roles</li>
+          <li>Filterable timeline, animated stats</li>
+          <li>Command palette (Ctrl/⌘ + K), contact form</li>
+        </ul>
+        <span class="go">Open →</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

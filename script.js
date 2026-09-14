@@ -163,6 +163,7 @@
     { label: 'Open LinkedIn', hint: 'link', run: () => window.open('https://www.linkedin.com/in/kytam0330/', '_blank', 'noopener') },
     { label: 'Toggle light / dark theme', hint: 'action', run: toggleTheme },
     { label: 'Back to top', hint: 'section', run: go('#home') },
+    { label: 'View other site versions', hint: 'link', run: () => { location.href = 'versions/'; } },
   ];
 
   const palette = $('#palette');
