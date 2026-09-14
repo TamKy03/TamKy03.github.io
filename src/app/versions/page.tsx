@@ -41,6 +41,19 @@ const cards = [
   },
 ];
 
+const demos = [
+  {
+    href: "/demo/hawker/",
+    tag: "Demo · F&B hawker",
+    title: "One-tap ordering page",
+    points: [
+      "“Order on GrabFood” button that opens the Grab app",
+      "WhatsApp chat button with a pre-filled message",
+      "Menu highlights and an order bar fixed to the bottom on phones",
+    ],
+  },
+];
+
 export default function VersionsPage() {
   return (
     <div className={s.root}>
@@ -57,6 +70,23 @@ export default function VersionsPage() {
               <h2>{card.title}</h2>
               <ul>
                 {card.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+              <span className={s.go}>Open →</span>
+            </a>
+          ))}
+        </div>
+
+        <h2 className={s.sectionTitle}>Demos</h2>
+        <p className={s.lead}>Sample pages for other kinds of clients, built with the same stack.</p>
+        <div className={s.grid}>
+          {demos.map((demo) => (
+            <a key={demo.href} className={s.card} href={demo.href}>
+              <span className={`${s.tag} ${s.demoTag}`}>{demo.tag}</span>
+              <h2>{demo.title}</h2>
+              <ul>
+                {demo.points.map((point) => (
                   <li key={point}>{point}</li>
                 ))}
               </ul>

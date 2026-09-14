@@ -66,6 +66,17 @@
   border-radius: 99px;
 }
 
+.demoTag {
+  background: #00b14f;
+  color: #fff;
+}
+
+.sectionTitle {
+  margin: 48px 0 0.25rem;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  letter-spacing: 0.02em;
+}
+
 .card h2 {
   margin: 0;
   font-size: 1.25rem;

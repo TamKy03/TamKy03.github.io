@@ -31,7 +31,7 @@ export const hawker = {
     grabUrl: "https://r.grab.com/g/6-20260915_010527_a8f58c172f9e4ea5a5e15a240c4cf466_MEXMPS-1-C8BXGND2A6J2N2",
     whatsapp: {
       // Put the stall's WhatsApp number here, e.g. "011-2345 6789". Left empty, the button shows "Number not set yet".
-      phone: "",
+      phone: "011-28001201",
       message: "Hi! I'd like to order from Stinky Taufu X Durian Cheese. ",
     },
   },
