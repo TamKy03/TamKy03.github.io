@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tam Kok Yan — Data Science</title>
+  <meta name="description" content="Tam Kok Yan — Computer Science (Data Science) undergraduate at TARUMT. Former code instructor, programme representative and Weiqi player.">
+  <meta property="og:title" content="Tam Kok Yan — Data Science">
+  <meta property="og:description" content="Computer Science (Data Science) undergraduate at TARUMT, Kuala Lumpur.">
+  <meta property="og:image" content="../assets/photo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    try { const t = localStorage.getItem('v3-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home"><span class="mono">&lt;</span>TKY<span class="mono">/&gt;</span></a>
+      <nav class="links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#journey">Journey</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="actions">
+        <button class="kbd-btn" id="openPalette" aria-label="Open command palette">
+          <span class="mono">⌘K</span>
+        </button>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle colour theme">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <canvas id="net" aria-hidden="true"></canvas>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="mono prompt">&gt; print(hello_world)</p>
+          <h1>Tam Kok Yan</h1>
+          <p class="typed-line"><span id="typed">Data Science undergraduate</span><span class="caret" aria-hidden="true"></span></p>
+          <p class="lede">Studying Computer Science (Data Science) at TARUMT in Kuala Lumpur. I've taught coding to young students and represent my faculty's students on campus.</p>
+          <div class="cta">
+            <a class="btn primary" href="#journey">Explore my journey</a>
+            <a class="btn ghost" href="https://www.linkedin.com/in/kytam0330/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
+        </div>
+        <div class="avatar">
+          <div class="ring"></div>
+          <img id="photo" src="../assets/photo.png" alt="Portrait of Tam Kok Yan" width="280" height="321">
+          <span class="initials" aria-hidden="true">TKY</span>
+        </div>
+      </div>
+
+      <div class="container stats">
+        <div class="stat"><strong data-count="3.81" data-decimals="2">0</strong><span>CGPA (Degree)</span></div>
+        <div class="stat"><strong data-count="7">0</strong><span>Months teaching code</span></div>
+        <div class="stat"><strong data-count="3">0</strong><span>Programming languages</span></div>
+        <div class="stat"><strong data-count="2">0</strong><span>Spoken languages</span></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker mono">01 · about</p>
+          <h2>Learning to find stories in data.</h2>
+          <p>I'm studying for a Bachelor of Computer Science (Honours) in Data Science at Tunku Abdul Rahman University of Management and Technology, with a CGPA of 3.8131. Before that, I finished the Foundation in Computing there with a CGPA of 3.8088.</p>
+          <p>As a part-time Code Instructor at Codekidz, I taught Scratch and Python to primary and secondary school students. Teaching made me better at breaking problems down and explaining them clearly.</p>
+        </div>
+        <pre class="code reveal" aria-label="Profile summary"><code><span class="c">// profile.json</span>
+{
+  <span class="k">"name"</span>: <span class="s">"Tam Kok Yan"</span>,
+  <span class="k">"based_in"</span>: <span class="s">"Kuala Lumpur, MY"</span>,
+  <span class="k">"studying"</span>: <span class="s">"BCS (Hons) Data Science"</span>,
+  <span class="k">"cgpa"</span>: <span class="n">3.8131</span>,
+  <span class="k">"stack"</span>: [<span class="s">"Python"</span>, <span class="s">"Java"</span>, <span class="s">"SQL"</span>],
+  <span class="k">"speaks"</span>: [<span class="s">"English"</span>, <span class="s">"Chinese"</span>],
+  <span class="k">"plays"</span>: <span class="s">"Weiqi (Go)"</span>
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="section alt" id="journey">
+      <div class="container">
+        <p class="kicker mono reveal">02 · journey</p>
+        <h2 class="reveal">Experience, education &amp; leadership</h2>
+
+        <div class="filters reveal" role="tablist" aria-label="Filter journey">
+          <button class="chip active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="chip" data-filter="work" role="tab" aria-selected="false">Work</button>
+          <button class="chip" data-filter="education" role="tab" aria-selected="false">Education</button>
+          <button class="chip" data-filter="leadership" role="tab" aria-selected="false">Leadership</button>
+        </div>
+
+        <ol class="journey">
+          <li class="entry reveal" data-type="leadership">
+            <div class="when mono">Jun 2022 — Present</div>
+            <div class="body">
+              <span class="badge leadership">Leadership</span>
+              <h3>Programme Representative</h3>
+              <p class="where">Faculty of Computing and Information Technology (FOCS), TARUMT</p>
+              <ul>
+                <li>Help the faculty communicate and deliver information to students.</li>
+                <li>Raise students' opinions and feedback with faculty management.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="entry reveal" data-type="education">
+            <div class="when mono">2022 — Present</div>
+            <div class="body">
+              <span class="badge education">Education</span>
+              <h3>Bachelor of Computer Science (Honours) in Data Science</h3>
+              <p class="where">Tunku Abdul Rahman University of Management and Technology · KL Main Campus</p>
+              <p class="gpa">CGPA <strong>3.8131</strong></p>
+            </div>
+          </li>
+          <li class="entry reveal" data-type="work">
+            <div class="when mono">Jul 2023 — Jan 2024</div>
+            <div class="body">
+              <span class="badge work">Work</span>
+              <h3>Code Instructor (Part-Time)</h3>
+              <p class="where">Codekidz by EduWel Sdn. Bhd. · Kuchai Exchange, Kuala Lumpur</p>
+              <ul>
+                <li>Designed and delivered coding lessons for primary and secondary school students.</li>
+                <li>Taught with age-appropriate programming languages such as Scratch and Python.</li>
+                <li>Ran a curriculum focused on fundamental coding concepts, problem-solving and algorithmic thinking.</li>
+              </ul>
+              <div class="tags"><span>Scratch</span><span>Python</span><span>Teaching</span><span>Curriculum</span></div>
+            </div>
+          </li>
+          <li class="entry reveal" data-type="leadership">
+            <div class="when mono">Jun 2022 — Oct 2022</div>
+            <div class="body">
+              <span class="badge leadership">Leadership</span>
+              <h3>Secretary, Weiqi Club</h3>
+              <p class="where">TARUMT</p>
+              <ul>
+                <li>Assisted the President in completing the club's registration forms.</li>
+                <li>Competed in the Confucius Cup Weiqi Competition (2022).</li>
+              </ul>
+            </div>
+          </li>
+          <li class="entry reveal" data-type="education">
+            <div class="when mono">2021 — 2022</div>
+            <div class="body">
+              <span class="badge education">Education</span>
+              <h3>Foundation in Computing</h3>
+              <p class="where">Tunku Abdul Rahman University of Management and Technology · KL Main Campus</p>
+              <p class="gpa">CGPA <strong>3.8088</strong></p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="container">
+        <p class="kicker mono reveal">03 · skills</p>
+        <h2 class="reveal">Toolbox</h2>
+        <div class="skill-grid">
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">py</span>
+            <h3>Python</h3>
+            <p>Taught it to students at Codekidz.</p>
+            <div class="dots" data-level="3" aria-label="Intermediate"></div>
+          </article>
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">jv</span>
+            <h3>Java</h3>
+            <p>Object-oriented programming.</p>
+            <div class="dots" data-level="3" aria-label="Intermediate"></div>
+          </article>
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">sql</span>
+            <h3>SQL</h3>
+            <p>Querying relational data.</p>
+            <div class="dots" data-level="3" aria-label="Intermediate"></div>
+          </article>
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">en</span>
+            <h3>English</h3>
+            <p>Spoken &amp; written.</p>
+            <div class="dots" data-level="3" aria-label="Intermediate"></div>
+          </article>
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">中</span>
+            <h3>Chinese</h3>
+            <p>Spoken &amp; written.</p>
+            <div class="dots" data-level="3" aria-label="Intermediate"></div>
+          </article>
+          <article class="skill reveal" data-tilt>
+            <span class="glyph mono">🧑‍🏫</span>
+            <h3>Teaching</h3>
+            <p>Explaining coding and problem-solving to young learners.</p>
+            <div class="dots" data-level="3" aria-label="Practised"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section alt" id="contact">
+      <div class="container split">
+        <div class="reveal">
+          <p class="kicker mono">04 · contact</p>
+          <h2>Let's build something with data.</h2>
+          <p>I'm open to internships and graduate opportunities in data science and software development.</p>
+          <div class="contact-links">
+            <button class="btn primary" id="copyEmail" data-email="kokyan2003330@gmail.com">Copy email</button>
+            <a class="btn ghost" href="https://www.linkedin.com/in/kytam0330/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          </div>
+          <p class="muted small">References available on request.</p>
+        </div>
+        <form class="form reveal" id="contactForm">
+          <label>Your name<input name="name" required autocomplete="name"></label>
+          <label>Subject<input name="subject" required placeholder="Internship opportunity"></label>
+          <label>Message<textarea name="message" rows="5" required></textarea></label>
+          <button class="btn primary" type="submit">Open in email app →</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <span>© <span id="year"></span> Tam Kok Yan</span>
+      <span class="muted mono">Press <kbd>Ctrl</kbd> + <kbd>K</kbd> to navigate</span>
+    </div>
+  </footer>
+
+  <!-- Command palette -->
+  <div class="palette" id="palette" hidden>
+    <div class="palette-box" role="dialog" aria-modal="true" aria-label="Command palette">
+      <input id="paletteInput" type="text" placeholder="Type a command…" autocomplete="off" aria-controls="paletteList">
+      <ul id="paletteList" role="listbox"></ul>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
