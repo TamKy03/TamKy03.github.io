@@ -1,0 +1,12 @@
+.bar {
+  margin: 0;
+  padding: 8px 16px;
+  text-align: center;
+  font: 0.82rem/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: #2a1a12;
+  color: #f3e6d3;
+}
+
+.bar a {
+  color: #f5b301;
+}

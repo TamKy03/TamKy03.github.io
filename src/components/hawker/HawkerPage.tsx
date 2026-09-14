@@ -1,16 +1,17 @@
 import { OrderButtons, StickyOrderBar } from "@/components/order/OrderButtons";
-import { formatPrice, hawker } from "@/content/hawker";
+import { VersionBar } from "@/components/VersionBar";
+import { dishes, drinks, formatPrice, hawker, hawkerVersions } from "@/content/hawker";
+import { DemoBar } from "./DemoBar";
 import s from "./hawker.module.css";
 
+// Intermediate version: hero, menu highlights, find-us section and a sticky order bar on phones.
 export function HawkerPage() {
   const { order } = hawker;
 
   return (
     <div className={s.root}>
-      <p className={s.demoBar}>
-        Demo page — not the official website of this business. Built by <a href="/">Tam Kok Yan</a> to show one-tap
-        GrabFood &amp; WhatsApp ordering.
-      </p>
+      <VersionBar versions={hawkerVersions} current="intermediate" label="Demo version" ariaLabel="Demo versions" />
+      <DemoBar />
 
       <header className={s.hero}>
         <div className={s.heroInner}>
@@ -51,21 +52,19 @@ export function HawkerPage() {
           <div className={s.container}>
             <h2 id="menu-title">Menu highlights</h2>
             <div className={s.menu}>
-              {hawker.menu.map((item) => (
-                <article key={item.name} className={s.dish}>
+              {dishes.map((item) => (
+                <article key={item.id} className={s.dish}>
                   <div className={s.dishTop}>
                     {item.tag && <span className={s.tag}>{item.tag}</span>}
                     <span className={s.price}>{formatPrice(item.price)}</span>
                   </div>
                   <h3>
                     {item.name}
-                    {item.nameZh && (
-                      <span className={s.dishZh} lang="zh">
-                        {item.nameZh}
-                      </span>
-                    )}
+                    <span className={s.dishZh} lang="zh">
+                      {item.nameZh}
+                    </span>
                   </h3>
-                  <p>{item.description}</p>
+                  {item.description && <p>{item.description}</p>}
                   <a className={s.dishOrder} href={order.grabUrl} target="_blank" rel="noopener noreferrer">
                     Order on GrabFood →
                   </a>
@@ -76,8 +75,8 @@ export function HawkerPage() {
             <div className={s.drinks}>
               <h3>Drinks</h3>
               <ul>
-                {hawker.drinks.map((drink) => (
-                  <li key={drink.name}>
+                {drinks.map((drink) => (
+                  <li key={drink.id}>
                     <span>{drink.name}</span>
                     <span>{formatPrice(drink.price)}</span>
                   </li>

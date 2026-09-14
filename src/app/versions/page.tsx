@@ -43,13 +43,33 @@ const cards = [
 
 const demos = [
   {
-    href: "/demo/hawker/",
-    tag: "Demo · F&B hawker",
+    href: "/demo/hawker/simple/",
+    tag: "Hawker · Simple",
+    title: "Link-in-bio card",
+    points: [
+      "One card with GrabFood, WhatsApp and directions buttons",
+      "Short price list, made for phones",
+      "Ideal for Instagram / TikTok bios and QR stickers",
+    ],
+  },
+  {
+    href: "/demo/hawker/intermediate/",
+    tag: "Hawker · Intermediate",
     title: "One-tap ordering page",
     points: [
-      "“Order on GrabFood” button that opens the Grab app",
-      "WhatsApp chat button with a pre-filled message",
-      "Menu highlights and an order bar fixed to the bottom on phones",
+      "Hero with “Order on GrabFood” and WhatsApp buttons",
+      "Menu highlights, drinks and a Find us section",
+      "Order bar fixed to the bottom on phones",
+    ],
+  },
+  {
+    href: "/demo/hawker/",
+    tag: "Hawker · Advanced · Main demo",
+    title: "WhatsApp order builder",
+    points: [
+      "Build an order with + / − and send it as a WhatsApp message",
+      "Live “Open now” status in Malaysia time",
+      "EN / 中文 toggle, menu filters and a share button",
     ],
   },
 ];
@@ -78,8 +98,12 @@ export default function VersionsPage() {
           ))}
         </div>
 
-        <h2 className={s.sectionTitle}>Demos</h2>
-        <p className={s.lead}>Sample pages for other kinds of clients, built with the same stack.</p>
+        <h2 id="demos" className={s.sectionTitle}>
+          Demos
+        </h2>
+        <p className={s.lead}>
+          An F&amp;B hawker ordering page in three versions, from simple to advanced — built with the same stack.
+        </p>
         <div className={s.grid}>
           {demos.map((demo) => (
             <a key={demo.href} className={s.card} href={demo.href}>
