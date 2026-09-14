@@ -102,6 +102,8 @@ h1, h2, h3 { margin: 0; line-height: 1.15; }
 .stat { background: color-mix(in srgb, var(--surface) 80%, transparent); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
 .stat strong { display: block; font-size: 2rem; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
 .stat span { color: var(--muted); font-size: .88rem; }
+.stat strong { white-space: nowrap; }
+@media (max-width: 480px) { .stat strong { font-size: 1.6rem; } }
 
 /* Sections */
 .section { padding: 110px 0; }
