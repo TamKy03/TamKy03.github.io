@@ -44,7 +44,7 @@
   onScroll();
 
   /* ---------- Typing roles ---------- */
-  const roles = ['Technical Consultant', 'Oracle NetSuite developer', 'SuiteScript 2.1', 'Integration builder', 'Data Science graduate'];
+  const roles = ['NetSuite Technical Consultant', 'SuiteScript 2.1 developer', 'Integration builder', 'Data Science graduate'];
   const typed = $('#typed');
   if (!reducedMotion) {
     let r = 0, i = roles[0].length, deleting = true;
