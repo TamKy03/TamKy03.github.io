@@ -44,7 +44,7 @@
   onScroll();
 
   /* ---------- Typing roles ---------- */
-  const roles = ['ERP Technical Consultant', 'Data Science graduate', 'Oracle ERP Cloud', 'Former Code Instructor', 'Weiqi player'];
+  const roles = ['Technical Consultant', 'Oracle NetSuite developer', 'SuiteScript 2.1', 'Integration builder', 'Data Science graduate'];
   const typed = $('#typed');
   if (!reducedMotion) {
     let r = 0, i = roles[0].length, deleting = true;
@@ -77,13 +77,14 @@
     const raw = el.dataset.count;
     const target = raw.includes('-') ? monthsSince(raw) : Number(raw);
     const decimals = Number(el.dataset.decimals || 0);
-    if (reducedMotion) { el.textContent = target.toFixed(decimals); return; }
+    const suffix = el.dataset.suffix || '';
+    if (reducedMotion) { el.textContent = target.toFixed(decimals) + suffix; return; }
     const start = performance.now();
     const dur = 1400;
     const step = (now) => {
       const t = Math.min((now - start) / dur, 1);
       const eased = 1 - Math.pow(1 - t, 3);
-      el.textContent = (target * eased).toFixed(decimals);
+      el.textContent = (target * eased).toFixed(decimals) + suffix;
       if (t < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);

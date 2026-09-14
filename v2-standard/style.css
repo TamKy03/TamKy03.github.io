@@ -111,6 +111,10 @@ h1, h2, h3 { line-height: 1.2; margin: 0; }
 .timeline small { font-weight: 500; color: var(--muted); font-size: .85rem; }
 .org { color: var(--muted); margin: 4px 0 10px !important; }
 .timeline ul { margin: 0; padding-left: 18px; }
+.lead-in { margin: 0 0 4px !important; }
+.timeline h4 { margin: 18px 0 8px; font-size: .82rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text); display: flex; align-items: center; gap: 10px; }
+.timeline h4::before { content: ""; width: 14px; height: 3px; border-radius: 2px; background: var(--accent); }
+.card.wide { grid-column: 1 / -1; }
 .timeline ul li { margin-bottom: 4px; }
 
 /* Cards */

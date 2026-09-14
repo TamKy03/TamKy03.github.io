@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tam Kok Yan — Resume</title>
-  <meta name="description" content="Tam Kok Yan — ERP Technical Consultant at BlackOak Consulting and Data Science graduate of TARUMT, Kuala Lumpur.">
+  <meta name="description" content="Tam Kok Yan — Technical Consultant at BlackOak Consulting building Oracle NetSuite customisation, automation and integration solutions. Data Science graduate of TARUMT.">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Tam Kok Yan">
   <meta property="og:url" content="https://tamky03.github.io/v1-lite/">
   <meta property="og:title" content="Tam Kok Yan — Resume">
-  <meta property="og:description" content="ERP Technical Consultant @ BlackOak Consulting · Data Science graduate of TARUMT.">
-  <meta property="og:image" content="https://tamky03.github.io/assets/og-image.png">
+  <meta property="og:description" content="Technical Consultant @ BlackOak Consulting — NetSuite customisation, automation and integrations. Data Science graduate of TARUMT.">
+  <meta property="og:image" content="https://tamky03.github.io/assets/og-image.png?v=2">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
@@ -30,6 +30,8 @@
     .edu span { display: block; font-size: .88rem; color: #c3c6cc; }
     .skill { display: flex; justify-content: space-between; font-size: .92rem; }
     .skill em { font-style: normal; color: var(--accent); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips li { margin: 0; font-size: .82rem; padding: 2px 9px; border: 1px solid #4a505a; border-radius: 99px; }
     main { padding: 0 0 40px; }
     header { background: var(--accent); margin: 60px 0 32px; padding: 36px 40px; }
     h1 { margin: 0; color: var(--ink); font-size: clamp(2rem, 5vw, 3rem); letter-spacing: .1em; line-height: 1.1; }
@@ -40,8 +42,11 @@
     .item { border-left: 2px solid #9aa0a8; padding-left: 18px; margin-bottom: 18px; position: relative; }
     .item::before { content: ""; position: absolute; left: -7px; top: 6px; width: 8px; height: 8px; border: 2px solid var(--ink); border-radius: 50%; background: #fff; }
     .item h3 { margin: 0; color: var(--ink); font-size: 1.05rem; letter-spacing: .04em; }
+    .item h4 { margin: 14px 0 4px; color: var(--ink); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
     .meta { color: var(--muted); font-size: .9rem; margin: 2px 0 6px; }
+    .summary { margin: 0 0 4px; }
     .item ul { margin: 0; padding-left: 18px; }
+    .item li { margin-bottom: 3px; }
     .version-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 6px; padding: 6px 16px; font: 500 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; background: #0b0c0f; color: #9aa1ab; }
     .version-bar a { color: #d7dade; text-decoration: none; padding: 3px 10px; border-radius: 999px; }
     .version-bar a:hover { color: #fff; background: rgba(255,255,255,.08); }
@@ -94,11 +99,28 @@
         <span>2021 – 2022 · CGPA 3.8088</span>
       </div>
 
-      <h2>Top Skills</h2>
-      <ul>
-        <li>Oracle ERP Cloud</li>
+      <h2>Oracle NetSuite</h2>
+      <ul class="chips">
+        <li>SuiteScript 2.1</li>
+        <li>Map/Reduce</li>
+        <li>Suitelet</li>
+        <li>SuiteQL</li>
+        <li>Saved Searches</li>
+        <li>Advanced PDF/HTML</li>
+        <li>REST Web Services</li>
+        <li>SDF</li>
+        <li>O2C</li>
+        <li>P2P</li>
+      </ul>
+
+      <h2>Integration &amp; Tools</h2>
+      <ul class="chips">
+        <li>SFTP</li>
+        <li>PGP Encryption</li>
+        <li>FreeMarker</li>
+        <li>Git</li>
+        <li>CI/CD</li>
         <li>Business Process Automation</li>
-        <li>Work-based Learning</li>
       </ul>
 
       <h2>Programming</h2>
@@ -118,15 +140,56 @@
     <main>
       <header>
         <h1>TAM KOK YAN</h1>
-        <p>ERP Technical Consultant @ BlackOak Consulting · Data Science Graduate</p>
+        <p>Technical Consultant @ BlackOak Consulting · Oracle NetSuite · Data Science Graduate</p>
       </header>
 
       <section>
         <h2>Experience</h2>
         <p class="company">BlackOak Consulting Sdn Bhd · Subang Jaya</p>
         <div class="item">
-          <h3>Enterprise Resource Planning Technical Consultant</h3>
-          <p class="meta">May 2025 – Present</p>
+          <h3>Junior Technical Consultant</h3>
+          <p class="meta">Full-time · May 2025 – Present</p>
+          <p class="summary">Delivering technical customisation, automation, and integration solutions on Oracle NetSuite — working across Order-to-Cash (O2C) and Procure-to-Pay (P2P) processes to translate business requirements into working system logic.</p>
+
+          <h4>Customisation &amp; Business Process Automation</h4>
+          <ul>
+            <li>Develop custom solutions in SuiteScript 2.1 across User Event, Client, Suitelet, Scheduled, and Map/Reduce script types</li>
+            <li>Build customisation features supporting Order-to-Cash and Procure-to-Pay processes, including transaction-level validation, automation, and downstream processing logic</li>
+            <li>Design and implement a Withholding Tax application to support statutory tax handling within transaction workflows</li>
+            <li>Architect an approval workflow system with exception handling routed to a queryable custom record, ensuring failures never block core transaction processing</li>
+            <li>Extend transactions using linked custom records rather than direct field additions, preserving transaction integrity and supporting one-to-many data relationships</li>
+            <li>Build a reusable popup selector framework capable of handling 50,000+ option datasets through a shared Suitelet and provider pattern</li>
+            <li>Develop a custom autocomplete field solution using INLINEHTML and Client Script</li>
+            <li>Migrate legacy SuiteScript 1.0 customisations to SuiteScript 2.1</li>
+          </ul>
+
+          <h4>System Integration</h4>
+          <ul>
+            <li>Implement a bank EFT Host-to-Host integration covering SFTP connectivity, PGP encryption, FreeMarker file templating, and outbound IP whitelisting configuration</li>
+            <li>Build high-volume data export integrations to SFTP, applying date-based chunking and Map/Reduce parallel processing to handle datasets exceeding one million records within platform governance limits</li>
+            <li>Develop REST Web Services workflows for custom record creation and updates</li>
+          </ul>
+
+          <h4>Reporting &amp; Data</h4>
+          <ul>
+            <li>Build custom saved searches and SuiteQL queries to support operational and management reporting</li>
+            <li>Optimise search design for large datasets — evaluating aggregation usage and field-level joins to maintain query performance at scale</li>
+            <li>Develop Advanced PDF/HTML templates for transaction documents</li>
+            <li>Implement saved search enhancements including dynamic HTML rendering and mass update procedures</li>
+          </ul>
+
+          <h4>Engineering Practices</h4>
+          <ul>
+            <li>Maintain Git-based version control and CI/CD pipelines for SuiteScript SDF projects, supporting multi-developer workflows through a structured branching strategy</li>
+            <li>Build reusable components and frameworks to reduce duplication across client implementations</li>
+            <li>Document solution designs, workflow logic, and technical specifications for client and internal handover</li>
+          </ul>
+
+          <h4>Troubleshooting &amp; Support</h4>
+          <ul>
+            <li>Diagnose and resolve defects across Sandbox and Production environments, including environment behaviour discrepancies, script governance limits, and platform-level constraints</li>
+            <li>Support UAT cycles and post-deployment stabilisation</li>
+          </ul>
         </div>
         <div class="item">
           <h3>Student Intern</h3>
