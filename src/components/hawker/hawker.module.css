@@ -153,6 +153,14 @@
   font-size: 1.2rem;
   font-weight: 800;
   color: var(--chili);
+  font-variant-numeric: tabular-nums;
+}
+
+.root a:focus-visible,
+.root button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
 .dish h3 {
@@ -173,11 +181,14 @@
 }
 
 .dishOrder {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 44px;
   margin-top: auto;
-  padding-top: 6px;
   font-weight: 700;
   font-size: 0.9rem;
-  color: #00883d;
+  color: #007f36;
   text-decoration: none;
 }
 

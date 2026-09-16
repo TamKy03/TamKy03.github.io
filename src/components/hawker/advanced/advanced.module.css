@@ -7,7 +7,8 @@
   --gold-soft: #ffe7a3;
   --chili: #c8321e;
   --line: #efdcc0;
-  --grab: #00b14f;
+  /* Darker than GrabFood's #00b14f so white label text clears 4.5:1 contrast */
+  --grab: #007f36;
   --whatsapp: #25d366;
   min-height: 100vh;
   font: 16px/1.55 var(--font-poppins), "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
@@ -25,6 +26,14 @@
 :where(.root) button {
   font: inherit;
   cursor: pointer;
+}
+
+:where(.root) a:focus-visible,
+:where(.root) button:focus-visible,
+:where(.root) textarea:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 
 .container {
@@ -118,7 +127,7 @@
 }
 
 .toolButton {
-  min-height: 38px;
+  min-height: 44px;
   padding: 0 14px;
   border-radius: 999px;
   border: 1px solid var(--line);
@@ -235,7 +244,10 @@
 }
 
 .chip {
-  padding: 7px 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
   border-radius: 999px;
   border: 1px solid var(--line);
   background: #fff;
@@ -340,6 +352,7 @@
 .price {
   font-size: 1.1rem;
   color: var(--chili);
+  font-variant-numeric: tabular-nums;
 }
 
 .stepper {
@@ -349,8 +362,8 @@
 }
 
 .stepper button {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid var(--line);
   background: #fff;
@@ -424,8 +437,8 @@
 }
 
 .lines .stepper button {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   font-size: 1rem;
 }
 
@@ -437,6 +450,7 @@
   padding-top: 10px;
   border-top: 1px dashed var(--line);
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .total strong {
@@ -528,7 +542,7 @@
 }
 
 .orGrab a {
-  color: #00883d;
+  color: #007f36;
   font-weight: 700;
   text-decoration: none;
 }

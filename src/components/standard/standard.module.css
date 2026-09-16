@@ -48,6 +48,13 @@
   margin: 0;
 }
 
+:where(.root) a:focus-visible,
+:where(.root) button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
 .container {
   width: min(1100px, 100% - 40px);
   margin-inline: auto;
@@ -106,6 +113,9 @@
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-weight: 700;
   font-size: 1.3rem;
   text-decoration: none;
@@ -122,6 +132,9 @@
 }
 
 .menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.95rem;
@@ -134,7 +147,7 @@
   content: "";
   position: absolute;
   left: 0;
-  bottom: -2px;
+  bottom: 6px;
   height: 2px;
   width: 0;
   background: var(--accent);
@@ -429,6 +442,7 @@
   color: var(--text);
   font-size: 1.4rem;
   margin-left: 6px;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Skill pills */

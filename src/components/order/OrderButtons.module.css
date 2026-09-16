@@ -59,8 +59,9 @@
   flex: none;
 }
 
+/* Darker than GrabFood's #00b14f so white label text clears 4.5:1 contrast */
 .grab {
-  background: #00b14f;
+  background: #007f36;
 }
 
 .whatsapp {

@@ -46,6 +46,13 @@
   font-family: var(--font-mono), ui-monospace, Consolas, monospace;
 }
 
+:where(.root) a:focus-visible,
+:where(.root) button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
 .muted {
   color: var(--muted);
 }
@@ -88,6 +95,9 @@
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -105,6 +115,9 @@
 }
 
 .links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   text-decoration: none;
   color: var(--muted);
   font-weight: 500;
@@ -428,10 +441,13 @@
 }
 
 .chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--muted);
-  padding: 8px 16px;
+  padding: 0 18px;
   border-radius: 999px;
   font: 500 0.9rem var(--font-poppins), sans-serif;
   cursor: pointer;
@@ -823,6 +839,12 @@
   font: 1rem var(--font-poppins), sans-serif;
   padding: 18px 20px;
   outline: none;
+}
+
+/* outline: none above needs a visible replacement for keyboard users */
+.palette input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 .palette ul {

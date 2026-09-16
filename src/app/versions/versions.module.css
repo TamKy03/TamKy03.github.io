@@ -66,9 +66,15 @@
   border-radius: 99px;
 }
 
+/* Darker than GrabFood's #00b14f so white tag text clears 4.5:1 contrast */
 .demoTag {
-  background: #00b14f;
+  background: #007f36;
   color: #fff;
+}
+
+.card:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
 }
 
 .sectionTitle {

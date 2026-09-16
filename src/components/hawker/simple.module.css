@@ -129,5 +129,12 @@
 .note {
   margin: 0;
   font-size: 0.72rem;
-  color: #8a7766;
+  color: #7a6857;
+}
+
+.card a:focus-visible,
+.card button:focus-visible {
+  outline: 3px solid #2a1a12;
+  outline-offset: 2px;
+  border-radius: 12px;
 }
