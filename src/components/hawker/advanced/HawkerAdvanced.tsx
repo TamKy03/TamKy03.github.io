@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ledgerFonts } from "@/app/fonts";
 import { VersionBar } from "@/components/VersionBar";
 import { categories, formatPrice, hawker, hawkerVersions, type MenuItem } from "@/content/hawker";
 import { formatTime, openStatus } from "@/lib/openingHours";
@@ -28,21 +29,22 @@ const en = {
   langToggle: "中文",
   openNow: "Open now",
   closed: "Closed",
-  closesAt: "Closes at",
-  opensAt: "Opens at",
-  checking: "Checking opening hours…",
-  usualHours: "Usual hours",
-  onGrab: "on GrabFood",
+  closesAt: "closes",
+  opensAt: "opens",
+  checking: "Checking hours…",
+  hours: "Hours",
+  rating: "Rated",
+  price: "Spend",
   share: "Share",
   linkCopied: "Link copied",
   directions: "Directions",
   orderGrab: "Order on GrabFood",
   menu: "Menu",
-  menuHint: "Tap + to build your order, then send it to us on WhatsApp.",
+  menuHint: "Add what you want, then send the chit to us on WhatsApp.",
   add: "Add",
   remove: "Remove one",
-  yourOrder: "Your order",
-  empty: "Your order is empty. Tap + on a dish to start.",
+  yourOrder: "Your chit",
+  empty: "Nothing on the chit yet.",
   total: "Total",
   pickup: "Self pick-up",
   delivery: "Delivery",
@@ -50,12 +52,11 @@ const en = {
   notePlaceholder: "e.g. Pick up at 8 pm, less spicy",
   send: "Send order on WhatsApp",
   whatsappMissing: "WhatsApp number not set",
-  orGrab: "Prefer delivery by Grab?",
-  clear: "Clear order",
-  review: "Review order",
+  orGrab: "Prefer Grab delivery?",
+  clear: "Clear chit",
+  review: "Review chit",
   items: (n: number) => `${n} item${n === 1 ? "" : "s"}`,
   findUs: "Find us",
-  hoursLabel: "Opening hours",
   messageIntro: "Hi! I'd like to order from {shop}:",
   messageNote: "Note",
 };
@@ -64,21 +65,22 @@ const zh: typeof en = {
   langToggle: "EN",
   openNow: "营业中",
   closed: "休息中",
-  closesAt: "打烊时间",
-  opensAt: "营业时间",
-  checking: "正在查看营业时间…",
-  usualHours: "一般营业时间",
-  onGrab: "GrabFood 评分",
+  closesAt: "打烊",
+  opensAt: "开档",
+  checking: "查看营业时间…",
+  hours: "营业时间",
+  rating: "评分",
+  price: "人均",
   share: "分享",
   linkCopied: "链接已复制",
   directions: "导航",
   orderGrab: "GrabFood 下单",
   menu: "菜单",
-  menuHint: "点 + 选好餐点，再通过 WhatsApp 发送订单。",
+  menuHint: "选好餐点，再通过 WhatsApp 把单子发给我们。",
   add: "加入",
   remove: "减少一份",
-  yourOrder: "我的订单",
-  empty: "订单是空的，点菜品上的 + 开始点餐。",
+  yourOrder: "我的单子",
+  empty: "单子还是空的。",
   total: "总计",
   pickup: "自取",
   delivery: "外送",
@@ -87,11 +89,10 @@ const zh: typeof en = {
   send: "通过 WhatsApp 发送订单",
   whatsappMissing: "尚未设置 WhatsApp 号码",
   orGrab: "想用 Grab 外送？",
-  clear: "清空订单",
-  review: "查看订单",
+  clear: "清空单子",
+  review: "查看单子",
   items: (n: number) => `${n} 份`,
   findUs: "店铺位置",
-  hoursLabel: "营业时间",
   messageIntro: "你好！我想在 {shop} 点餐：",
   messageNote: "备注",
 };
@@ -113,7 +114,7 @@ function writeStorage(key: string, value: unknown) {
   } catch {}
 }
 
-// Advanced version: live open/closed status, EN/中文, category filter, and a WhatsApp order builder.
+// Advanced demo, "order chit" edition: the menu is a ruled bill, the order panel is a receipt.
 export function HawkerAdvanced() {
   const [lang, setLang] = useState<Lang>("en");
   const [category, setCategory] = useState<CategoryKey>("all");
@@ -126,7 +127,6 @@ export function HawkerAdvanced() {
   const toastTimer = useRef<number | undefined>(undefined);
   const t = copy[lang];
 
-  // Restore the visitor's language and cart, then keep them saved.
   useEffect(() => {
     setLang(readStorage<Lang>(LANG_KEY, "en"));
     setCart(readStorage<Cart>(CART_KEY, {}));
@@ -139,7 +139,6 @@ export function HawkerAdvanced() {
     if (loaded) writeStorage(CART_KEY, cart);
   }, [cart, loaded]);
 
-  // Open/closed is computed in the browser (Malaysia time) and refreshed every minute.
   useEffect(() => {
     const update = () => setStatus(openStatus(hawker.openingHours, new Date(), hawker.timeZone));
     update();
@@ -204,80 +203,82 @@ export function HawkerAdvanced() {
   const secondaryName = (item: MenuItem) => (lang === "zh" ? item.name : item.nameZh);
 
   return (
-    <div className={s.root} lang={lang === "zh" ? "zh" : "en"}>
+    <div className={cx(s.root, ledgerFonts)} lang={lang === "zh" ? "zh" : "en"}>
       <VersionBar versions={hawkerVersions} current="advanced" label="Demo version" ariaLabel="Demo versions" />
       <DemoBar />
 
-      <header className={s.hero}>
-        <div className={cx(s.container, s.heroInner)}>
-          <div className={s.badge} aria-hidden="true">
-            臭豆腐
+      <header className={s.header}>
+        <div className={s.shell}>
+          <div className={s.headerTop}>
+            <span className={cx(s.status, status && (status.isOpen ? s.open : s.shut))} role="status" aria-live="polite">
+              <i aria-hidden="true" />
+              {status
+                ? status.isOpen
+                  ? `${t.openNow} · ${t.closesAt} ${formatTime(status.changeAt ?? "")}`
+                  : `${t.closed} · ${t.opensAt} ${status.changeAt ? formatTime(status.changeAt) : ""}`
+                : t.checking}
+            </span>
+            <div className={s.headerTools}>
+              <button type="button" className={s.tool} onClick={() => setLang(lang === "en" ? "zh" : "en")}>
+                {t.langToggle}
+              </button>
+              <button type="button" className={s.tool} onClick={share}>
+                {t.share}
+              </button>
+            </div>
           </div>
-          <div className={s.heroText}>
-            <div className={s.statusRow}>
-              <span
-                className={cx(s.status, status && (status.isOpen ? s.open : s.closedStatus))}
-                role="status"
-                aria-live="polite"
-              >
-                <i aria-hidden="true" />
-                {status
-                  ? status.isOpen
-                    ? `${t.openNow} · ${t.closesAt} ${formatTime(status.changeAt ?? "")}`
-                    : `${t.closed} · ${t.opensAt} ${status.changeAt ? formatTime(status.changeAt) : ""}`
-                  : t.checking}
-              </span>
-              <div className={s.tools}>
-                <button type="button" className={s.toolButton} onClick={() => setLang(lang === "en" ? "zh" : "en")}>
-                  {t.langToggle}
-                </button>
-                <button type="button" className={s.toolButton} onClick={share}>
-                  {t.share}
-                </button>
-              </div>
+
+          <div className={s.identity}>
+            <span className={s.seal} aria-hidden="true">
+              臭豆腐
+            </span>
+            <div>
+              <h1>{lang === "zh" ? hawker.nameZh : hawker.name}</h1>
+              <p className={s.altName}>{lang === "zh" ? hawker.name : hawker.nameZh}</p>
+              <p className={s.tagline}>{lang === "zh" ? hawker.taglineZh : hawker.tagline}</p>
             </div>
-            <h1>
-              {lang === "zh" ? hawker.nameZh : hawker.name}
-              <span className={s.nameAlt}>{lang === "zh" ? hawker.name : hawker.nameZh}</span>
-            </h1>
-            <p className={s.tagline}>{lang === "zh" ? hawker.taglineZh : hawker.tagline}</p>
-            <ul className={s.facts}>
-              <li>
-                ⭐ {hawker.rating} {t.onGrab}
-              </li>
-              <li>
-                🕔 {t.usualHours}: {hawker.hours}
-              </li>
-              <li>💰 {hawker.priceRange}</li>
-              {(lang === "zh" ? hawker.cuisinesZh : hawker.cuisines).map((cuisine) => (
-                <li key={cuisine} className={s.cuisine}>
-                  {cuisine}
-                </li>
-              ))}
-            </ul>
-            <div className={s.heroActions}>
-              <a className={s.grabButton} href={hawker.order.grabUrl} target="_blank" rel="noopener noreferrer">
-                {t.orderGrab}
-              </a>
-              <a className={s.ghostButton} href={hawker.mapsUrl} target="_blank" rel="noopener noreferrer">
-                📍 {t.directions}
-              </a>
+          </div>
+
+          <dl className={s.vitals}>
+            <div>
+              <dt>{t.rating}</dt>
+              <dd>{hawker.rating} / 5</dd>
             </div>
+            <div>
+              <dt>{t.hours}</dt>
+              <dd>{hawker.hours}</dd>
+            </div>
+            <div>
+              <dt>{t.price}</dt>
+              <dd>{hawker.priceRange}</dd>
+            </div>
+          </dl>
+
+          <div className={s.headerActions}>
+            <a className={s.primary} href={hawker.order.grabUrl} target="_blank" rel="noopener noreferrer">
+              {t.orderGrab}
+            </a>
+            <a className={s.secondary} href={hawker.mapsUrl} target="_blank" rel="noopener noreferrer">
+              {t.directions}
+            </a>
           </div>
         </div>
       </header>
 
-      <div className={cx(s.container, s.layout)}>
-        <main className={s.menuSection} aria-labelledby="menu-heading">
-          <h2 id="menu-heading">{t.menu}</h2>
-          <p className={s.hint}>{t.menuHint}</p>
-          <div className={s.chips} role="group" aria-label={t.menu}>
+      <div className={cx(s.shell, s.layout)}>
+        <main className={s.menu} aria-labelledby="menu-heading">
+          <div className={s.menuHead}>
+            <h2 id="menu-heading">{t.menu}</h2>
+            <p>{t.menuHint}</p>
+          </div>
+
+          <div className={s.filters} role="group" aria-label={t.menu}>
             {categories.map((c) => (
               <button
                 key={c.key}
                 type="button"
                 aria-pressed={category === c.key}
-                className={cx(s.chip, category === c.key && s.chipActive)}
+                className={cx(s.filter, category === c.key && s.filterOn)}
                 onClick={() => setCategory(c.key)}
               >
                 {lang === "zh" ? c.labelZh : c.label}
@@ -285,77 +286,74 @@ export function HawkerAdvanced() {
             ))}
           </div>
 
-          <ul className={s.grid}>
+          <ul className={s.bill}>
             {visibleItems.map((item) => {
               const qty = cart[item.id] ?? 0;
               const description = lang === "zh" ? item.descriptionZh : item.description;
               return (
-                <li key={item.id} className={cx(s.dish, qty > 0 && s.dishSelected)}>
-                  <div className={s.thumb} aria-hidden="true">
-                    {item.glyph}
-                  </div>
-                  <div className={s.dishBody}>
-                    <div className={s.dishHead}>
-                      <h3>
-                        {primaryName(item)}
-                        <span>{secondaryName(item)}</span>
-                      </h3>
+                <li key={item.id} className={cx(s.billRow, qty > 0 && s.billRowOn)}>
+                  <div className={s.dish}>
+                    <h3>
+                      {primaryName(item)}
                       {item.tag && <span className={s.tag}>{lang === "zh" ? item.tagZh : item.tag}</span>}
-                    </div>
-                    {description && <p>{description}</p>}
-                    <div className={s.dishFoot}>
-                      <strong className={s.price}>{formatPrice(item.price)}</strong>
-                      <div className={s.stepper}>
-                        {qty > 0 && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => changeQty(item.id, -1)}
-                              aria-label={`${t.remove}: ${primaryName(item)}`}
-                            >
-                              −
-                            </button>
-                            <span aria-live="polite">{qty}</span>
-                          </>
-                        )}
-                        <button
-                          type="button"
-                          className={s.addButton}
-                          onClick={() => changeQty(item.id, 1)}
-                          aria-label={`${t.add}: ${primaryName(item)}`}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
+                    </h3>
+                    <p className={s.altName}>{secondaryName(item)}</p>
+                    {description && <p className={s.dishNote}>{description}</p>}
                   </div>
+                  <span className={s.leader} aria-hidden="true" />
+                  <span className={s.amount}>{formatPrice(item.price)}</span>
+                  <span className={s.stepper}>
+                    {qty > 0 && (
+                      <>
+                        <button type="button" onClick={() => changeQty(item.id, -1)} aria-label={`${t.remove}: ${primaryName(item)}`}>
+                          −
+                        </button>
+                        <span className={s.qty} aria-live="polite">
+                          {qty}
+                        </span>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      className={s.addButton}
+                      onClick={() => changeQty(item.id, 1)}
+                      aria-label={`${t.add}: ${primaryName(item)}`}
+                    >
+                      +
+                    </button>
+                  </span>
                 </li>
               );
             })}
           </ul>
-          <p className={s.note}>{lang === "zh" ? hawker.sourceNoteZh : hawker.sourceNote}</p>
+
+          <p className={s.sourceNote}>{lang === "zh" ? hawker.sourceNoteZh : hawker.sourceNote}</p>
         </main>
 
-        <aside id="order" className={s.summary} aria-labelledby="order-heading">
-          <h2 id="order-heading">{t.yourOrder}</h2>
+        <aside id="order" className={s.chit} aria-labelledby="chit-heading">
+          <div className={s.chitTop}>
+            <h2 id="chit-heading">{t.yourOrder}</h2>
+            <span className={s.chitShop}>{hawker.branch}</span>
+          </div>
+
           {lines.length === 0 ? (
             <p className={s.empty}>{t.empty}</p>
           ) : (
             <>
-              <ul className={s.lines}>
+              <ul className={s.chitLines}>
                 {hawker.menu
                   .filter((item) => cart[item.id])
                   .map((item) => (
                     <li key={item.id}>
-                      <span className={s.lineName}>
-                        {primaryName(item)}
-                        <small>{formatPrice(lineTotal({ name: item.name, price: item.price, qty: cart[item.id] }))}</small>
+                      <span className={s.chitQty}>{cart[item.id]}×</span>
+                      <span className={s.chitName}>{primaryName(item)}</span>
+                      <span className={s.amount}>
+                        {formatPrice(lineTotal({ name: item.name, price: item.price, qty: cart[item.id] }))}
                       </span>
                       <span className={s.stepper}>
                         <button type="button" onClick={() => changeQty(item.id, -1)} aria-label={`${t.remove}: ${primaryName(item)}`}>
                           −
                         </button>
-                        <span>{cart[item.id]}</span>
                         <button type="button" onClick={() => changeQty(item.id, 1)} aria-label={`${t.add}: ${primaryName(item)}`}>
                           +
                         </button>
@@ -363,7 +361,8 @@ export function HawkerAdvanced() {
                     </li>
                   ))}
               </ul>
-              <p className={s.total}>
+
+              <p className={s.chitTotal}>
                 <span>
                   {t.total} · {t.items(count)}
                 </span>
@@ -377,7 +376,7 @@ export function HawkerAdvanced() {
                     type="button"
                     role="radio"
                     aria-checked={method === m}
-                    className={cx(s.method, method === m && s.methodActive)}
+                    className={cx(s.method, method === m && s.methodOn)}
                     onClick={() => setMethod(m)}
                   >
                     {m === "pickup" ? t.pickup : t.delivery}
@@ -387,56 +386,55 @@ export function HawkerAdvanced() {
 
               <label className={s.noteField}>
                 {t.noteLabel}
-                <textarea
-                  rows={2}
-                  value={note}
-                  placeholder={t.notePlaceholder}
-                  onChange={(e) => setNote(e.target.value)}
-                />
+                <textarea rows={2} value={note} placeholder={t.notePlaceholder} onChange={(e) => setNote(e.target.value)} />
               </label>
             </>
           )}
 
           {orderUrl ? (
-            <a className={s.sendButton} href={orderUrl} target="_blank" rel="noopener noreferrer">
+            <a className={s.send} href={orderUrl} target="_blank" rel="noopener noreferrer">
               {t.send}
             </a>
           ) : (
-            <span className={cx(s.sendButton, s.sendDisabled)} aria-disabled="true">
+            <span className={cx(s.send, s.sendOff)} aria-disabled="true">
               {whatsappConfigured ? t.send : t.whatsappMissing}
             </span>
           )}
+
           {lines.length > 0 && (
-            <button type="button" className={s.clearButton} onClick={() => setCart({})}>
+            <button type="button" className={s.clear} onClick={() => setCart({})}>
               {t.clear}
             </button>
           )}
+
           <p className={s.orGrab}>
             {t.orGrab}{" "}
             <a href={hawker.order.grabUrl} target="_blank" rel="noopener noreferrer">
-              {t.orderGrab} →
+              {t.orderGrab}
             </a>
           </p>
         </aside>
       </div>
 
-      <section className={s.visit} aria-labelledby="visit-heading">
-        <div className={cx(s.container, s.visitInner)}>
+      <section className={s.findUs} aria-labelledby="find-heading">
+        <div className={cx(s.shell, s.findUsInner)}>
           <div>
-            <h2 id="visit-heading">{t.findUs}</h2>
+            <h2 id="find-heading">{t.findUs}</h2>
             <p className={s.address}>{hawker.address}</p>
-            <p>
-              <strong>{t.hoursLabel}:</strong> {hawker.hours}
+            <p className={s.addressHours}>
+              {t.hours}: {hawker.hours}
             </p>
           </div>
-          <a className={s.ghostButton} href={hawker.mapsUrl} target="_blank" rel="noopener noreferrer">
-            📍 {t.directions} ↗
+          <a className={s.secondary} href={hawker.mapsUrl} target="_blank" rel="noopener noreferrer">
+            {t.directions}
           </a>
         </div>
       </section>
 
       <footer className={s.footer}>
-        Demo page by <a href="/">Tam Kok Yan</a>. GrabFood and WhatsApp are trademarks of their respective owners.
+        <div className={s.shell}>
+          Demo page by <a href="/">Tam Kok Yan</a>. GrabFood and WhatsApp are trademarks of their respective owners.
+        </div>
       </footer>
 
       <nav className={s.mobileBar} aria-label={t.yourOrder}>
@@ -461,7 +459,7 @@ export function HawkerAdvanced() {
         )}
       </nav>
 
-      <div className={cx(s.toast, toast && s.toastShow)} role="status" aria-live="polite">
+      <div className={cx(s.toast, toast && s.toastOn)} role="status" aria-live="polite">
         {toast}
       </div>
     </div>
