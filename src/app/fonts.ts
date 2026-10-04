@@ -1,21 +1,6 @@
-import { IBM_Plex_Mono, IBM_Plex_Sans, Instrument_Serif, JetBrains_Mono, Poppins } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Instrument_Serif } from "next/font/google";
 
-// Used by the Standard, Lite, Compare and the Simple/Intermediate hawker pages
-export const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
-  display: "swap",
-});
-
-export const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  variable: "--font-mono",
-  display: "swap",
-});
-
-// "Ledger" redesign: editorial serif display, engineered text face, mono for figures
+// Editorial serif display, engineered text face, mono for figures and code
 export const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: ["400"],
@@ -38,5 +23,4 @@ export const plexMono = IBM_Plex_Mono({
   display: "swap",
 });
 
-// Applied on the root element of redesigned pages
 export const ledgerFonts = `${instrumentSerif.variable} ${plexSans.variable} ${plexMono.variable}`;

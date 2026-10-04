@@ -1,4 +1,4 @@
-import { InteractiveSite } from "@/components/interactive/InteractiveSite";
+import { PortfolioSite } from "@/components/portfolio/PortfolioSite";
 import { pageMetadata } from "@/content/site";
 
 export const metadata = pageMetadata({
@@ -7,5 +7,5 @@ export const metadata = pageMetadata({
 });
 
 export default function HomePage() {
-  return <InteractiveSite />;
+  return <PortfolioSite />;
 }

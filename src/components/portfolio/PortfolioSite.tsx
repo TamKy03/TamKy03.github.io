@@ -1,9 +1,19 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+  type ReactNode,
+} from "react";
+import { flushSync } from "react-dom";
 import { ledgerFonts } from "@/app/fonts";
-import { VersionBar } from "@/components/VersionBar";
 import { useReducedMotion } from "@/components/hooks";
+import { craft } from "@/content/craft";
 import {
   codeInstructor,
   degree,
@@ -15,21 +25,31 @@ import {
   period,
   profile,
   programmeRep,
-  programmingLanguages,
   spokenLanguages,
   university,
   weiqiClub,
 } from "@/content/profile";
 import { cx, monthsSince } from "@/lib/utils";
 import { CommandPalette, type Command } from "./CommandPalette";
-import s from "./interactive.module.css";
+import s from "./portfolio.module.css";
 
 type Theme = "light" | "dark";
-type EntryType = "work" | "education" | "leadership";
+type EntryType = "work" | "education" | "campus";
 type Filter = "all" | EntryType;
+
+type Entry = {
+  id: string;
+  type: EntryType;
+  when: string;
+  figure: string;
+  title: string;
+  where: string;
+  body?: ReactNode;
+};
 
 const navLinks = [
   { id: "record", label: "Record" },
+  { id: "craft", label: "Craft" },
   { id: "toolkit", label: "Toolkit" },
   { id: "contact", label: "Contact" },
 ];
@@ -38,46 +58,19 @@ const filters: { key: Filter; label: string }[] = [
   { key: "all", label: "Everything" },
   { key: "work", label: "Work" },
   { key: "education", label: "Study" },
-  { key: "leadership", label: "Campus" },
+  { key: "campus", label: "Campus" },
 ];
 
 const toolkit = [
-  { field: "Oracle NetSuite", detail: netsuiteSkills.join(", ") },
+  { field: "NetSuite", detail: netsuiteSkills.join(", ") },
   { field: "Integration & engineering", detail: integrationSkills.join(", ") },
-  { field: "Programming", detail: programmingLanguages.join(", ") },
+  { field: "Data & AI", detail: "Python, SQL, statistics, model evaluation — BCS (Hons) Data Science, TARUMT" },
+  { field: "Web", detail: "TypeScript, React, Next.js, CSS scroll-driven animation, View Transitions, accessibility" },
   { field: "Languages", detail: spokenLanguages.join(", ") },
 ];
 
-// Applies the saved theme before first paint to avoid a light/dark flash.
-const themeScript = `try{var t=localStorage.getItem("v3-theme");if(t==="light"||t==="dark")document.currentScript.parentElement.dataset.theme=t}catch(e){}`;
-
-function Entry({
-  when,
-  figure,
-  type,
-  title,
-  where,
-  children,
-}: {
-  when: string;
-  figure: string;
-  type: EntryType;
-  title: string;
-  where: string;
-  children?: ReactNode;
-}) {
-  return (
-    <li className={s.entry} data-type={type}>
-      <div className={s.when}>{when}</div>
-      <div className={s.entryBody}>
-        <h3>{title}</h3>
-        <p className={s.where}>{where}</p>
-        {children}
-      </div>
-      <div className={s.entryFigure}>{figure}</div>
-    </li>
-  );
-}
+// Applies the saved theme before first paint to avoid a flash of the wrong one.
+const themeScript = `try{var t=localStorage.getItem("tky-theme");if(t==="light"||t==="dark")document.currentScript.parentElement.dataset.theme=t}catch(e){}`;
 
 function Bullets({ items }: { items: string[] }) {
   return (
@@ -89,7 +82,7 @@ function Bullets({ items }: { items: string[] }) {
   );
 }
 
-export function InteractiveSite() {
+export function PortfolioSite() {
   const reduced = useReducedMotion();
   const toastTimer = useRef<number | undefined>(undefined);
 
@@ -104,7 +97,7 @@ export function InteractiveSite() {
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("v3-theme");
+      const saved = localStorage.getItem("tky-theme");
       if (saved === "light" || saved === "dark") setTheme(saved);
     } catch {}
   }, []);
@@ -113,11 +106,23 @@ export function InteractiveSite() {
     setTheme((current) => {
       const next: Theme = current === "light" ? "dark" : "light";
       try {
-        localStorage.setItem("v3-theme", next);
+        localStorage.setItem("tky-theme", next);
       } catch {}
       return next;
     });
   }, []);
+
+  // The browser animates between list states; no measuring, no FLIP maths.
+  const applyFilter = useCallback(
+    (next: Filter) => {
+      if (reduced || typeof document.startViewTransition !== "function") {
+        setFilter(next);
+        return;
+      }
+      document.startViewTransition(() => flushSync(() => setFilter(next)));
+    },
+    [reduced],
+  );
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -156,18 +161,23 @@ export function InteractiveSite() {
   const commands = useMemo<Command[]>(
     () => [
       { label: "Go to record", hint: "section", run: () => goTo("record") },
+      { label: "Go to craft", hint: "section", run: () => goTo("craft") },
       { label: "Go to toolkit", hint: "section", run: () => goTo("toolkit") },
       { label: "Go to contact", hint: "section", run: () => goTo("contact") },
-      { label: "Show work only", hint: "filter", run: () => { setFilter("work"); goTo("record"); } },
-      { label: "Show study only", hint: "filter", run: () => { setFilter("education"); goTo("record"); } },
-      { label: "Show campus roles", hint: "filter", run: () => { setFilter("leadership"); goTo("record"); } },
+      ...craft.map((piece) => ({
+        label: `Read: ${piece.title}`,
+        hint: piece.kicker.toLowerCase(),
+        run: () => goTo(piece.id),
+      })),
+      { label: "Show work only", hint: "filter", run: () => { applyFilter("work"); goTo("record"); } },
+      { label: "Show study only", hint: "filter", run: () => { applyFilter("education"); goTo("record"); } },
+      { label: "Show campus roles", hint: "filter", run: () => { applyFilter("campus"); goTo("record"); } },
       { label: "Copy email address", hint: "action", run: copyEmail },
       { label: "Open LinkedIn", hint: "link", run: () => window.open(profile.linkedin, "_blank", "noopener") },
       { label: "Switch paper / ink", hint: "action", run: toggleTheme },
       { label: "Back to top", hint: "section", run: () => goTo("home") },
-      { label: "View other site versions", hint: "link", run: () => { window.location.href = "/versions/"; } },
     ],
-    [copyEmail, goTo, toggleTheme],
+    [applyFilter, copyEmail, goTo, toggleTheme],
   );
 
   const onContactSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -177,12 +187,88 @@ export function InteractiveSite() {
     window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(String(data.get("subject")))}&body=${encodeURIComponent(body)}`;
   };
 
-  const show = (type: EntryType) => filter === "all" || filter === type;
+  const entries: Entry[] = [
+    {
+      id: "blackoak",
+      type: "work",
+      when: period(netsuiteRole.period, " – "),
+      figure: netsuiteRole.employment,
+      title: netsuiteRole.title,
+      where: `${netsuiteRole.org}, ${netsuiteRole.place}`,
+      body: (
+        <>
+          <p className={s.summary}>{netsuiteRole.summary}</p>
+          <div className={s.groups}>
+            {netsuiteRole.groups.map((group, i) => (
+              <details key={group.title} open={i === 0}>
+                <summary>{group.title}</summary>
+                <Bullets items={group.items} />
+              </details>
+            ))}
+          </div>
+        </>
+      ),
+    },
+    {
+      id: "degree",
+      type: "education",
+      when: period(degree.period, " – "),
+      figure: `CGPA ${degree.cgpa}`,
+      title: degree.title,
+      where: `${university}, KL Main Campus`,
+    },
+    {
+      id: "intern",
+      type: "work",
+      when: period(internship.period, " – "),
+      figure: "Internship",
+      title: internship.title,
+      where: `${internship.org}, ${internship.place}`,
+    },
+    {
+      id: "rep",
+      type: "campus",
+      when: period(programmeRep.period, " – "),
+      figure: "Faculty",
+      title: programmeRep.title,
+      where: programmeRep.org,
+      body: <Bullets items={programmeRep.bullets} />,
+    },
+    {
+      id: "codekidz",
+      type: "work",
+      when: period(codeInstructor.period, " – "),
+      figure: codeInstructor.employment,
+      title: codeInstructor.title,
+      where: `${codeInstructor.org}, ${codeInstructor.place}`,
+      body: <Bullets items={codeInstructor.bullets} />,
+    },
+    {
+      id: "weiqi",
+      type: "campus",
+      when: period(weiqiClub.period, " – "),
+      figure: "Club",
+      title: weiqiClub.title,
+      where: weiqiClub.org,
+      body: <Bullets items={weiqiClub.bullets} />,
+    },
+    {
+      id: "foundation",
+      type: "education",
+      when: period(foundation.period, " – "),
+      figure: `CGPA ${foundation.cgpa}`,
+      title: foundation.title,
+      where: `${university}, KL Main Campus`,
+    },
+  ];
+
+  const visibleEntries = entries.filter((entry) => filter === "all" || entry.type === filter);
 
   return (
     <div className={cx(s.root, ledgerFonts)} data-theme={theme} suppressHydrationWarning>
       <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      <VersionBar current="interactive" />
+      {/* Reading progress, driven by the document scroll timeline in CSS */}
+      <div className={s.progress} aria-hidden="true" />
 
       <header className={s.masthead}>
         <div className={s.shell}>
@@ -219,9 +305,9 @@ export function InteractiveSite() {
                 </h1>
                 <span className={s.highlight} aria-hidden="true" />
                 <p className={s.lede}>
-                  I build the parts of Oracle NetSuite that other people never see: the scripts that validate a
-                  transaction, the integration that moves a million records overnight, the approval flow that keeps
-                  going when something fails.
+                  NetSuite technical consultant with a data science degree. I write the SuiteScript behind
+                  Order-to-Cash and Procure-to-Pay, build integrations that move a million records a night, and build
+                  for the web in my own time — this page included.
                 </p>
               </div>
 
@@ -276,7 +362,7 @@ export function InteractiveSite() {
                     type="button"
                     aria-pressed={filter === f.key}
                     className={cx(s.chip, filter === f.key && s.chipOn)}
-                    onClick={() => setFilter(f.key)}
+                    onClick={() => applyFilter(f.key)}
                   >
                     {f.label}
                   </button>
@@ -285,86 +371,69 @@ export function InteractiveSite() {
             </div>
 
             <ol className={s.ledger}>
-              {show("work") && (
-                <Entry
-                  type="work"
-                  when={period(netsuiteRole.period, " – ")}
-                  figure={netsuiteRole.employment}
-                  title={netsuiteRole.title}
-                  where={`${netsuiteRole.org}, ${netsuiteRole.place}`}
+              {visibleEntries.map((entry) => (
+                <li
+                  key={entry.id}
+                  className={cx(s.entry, s.reveal)}
+                  style={{ "--vt": `row-${entry.id}` } as CSSProperties}
                 >
-                  <p className={s.summary}>{netsuiteRole.summary}</p>
-                  <div className={s.groups}>
-                    {netsuiteRole.groups.map((group, i) => (
-                      <details key={group.title} open={i === 0}>
-                        <summary>{group.title}</summary>
-                        <Bullets items={group.items} />
-                      </details>
-                    ))}
+                  <div className={s.when}>{entry.when}</div>
+                  <div className={s.entryBody}>
+                    <h3>{entry.title}</h3>
+                    <p className={s.where}>{entry.where}</p>
+                    {entry.body}
                   </div>
-                </Entry>
-              )}
-              {show("education") && (
-                <Entry
-                  type="education"
-                  when={period(degree.period, " – ")}
-                  figure={`CGPA ${degree.cgpa}`}
-                  title={degree.title}
-                  where={`${university}, KL Main Campus`}
-                />
-              )}
-              {show("work") && (
-                <Entry
-                  type="work"
-                  when={period(internship.period, " – ")}
-                  figure="Internship"
-                  title={internship.title}
-                  where={`${internship.org}, ${internship.place}`}
-                />
-              )}
-              {show("leadership") && (
-                <Entry
-                  type="leadership"
-                  when={period(programmeRep.period, " – ")}
-                  figure="Faculty"
-                  title={programmeRep.title}
-                  where={programmeRep.org}
-                >
-                  <Bullets items={programmeRep.bullets} />
-                </Entry>
-              )}
-              {show("work") && (
-                <Entry
-                  type="work"
-                  when={period(codeInstructor.period, " – ")}
-                  figure={codeInstructor.employment}
-                  title={codeInstructor.title}
-                  where={`${codeInstructor.org}, ${codeInstructor.place}`}
-                >
-                  <Bullets items={codeInstructor.bullets} />
-                </Entry>
-              )}
-              {show("leadership") && (
-                <Entry
-                  type="leadership"
-                  when={period(weiqiClub.period, " – ")}
-                  figure="Club"
-                  title={weiqiClub.title}
-                  where={weiqiClub.org}
-                >
-                  <Bullets items={weiqiClub.bullets} />
-                </Entry>
-              )}
-              {show("education") && (
-                <Entry
-                  type="education"
-                  when={period(foundation.period, " – ")}
-                  figure={`CGPA ${foundation.cgpa}`}
-                  title={foundation.title}
-                  where={`${university}, KL Main Campus`}
-                />
-              )}
+                  <div className={s.entryFigure}>{entry.figure}</div>
+                </li>
+              ))}
             </ol>
+          </div>
+        </section>
+
+        <section id="craft" className={s.section}>
+          <div className={s.shell}>
+            <div className={s.sectionHead}>
+              <h2>Craft</h2>
+              <p className={s.sectionNote}>What I care about technically, and the code behind each piece.</p>
+            </div>
+
+            {craft.map((piece) => (
+              <article key={piece.id} id={piece.id} className={cx(s.piece, s.reveal)}>
+                <div className={s.pieceHead}>
+                  <span className={s.kicker}>{piece.kicker}</span>
+                  <h3>{piece.title}</h3>
+                </div>
+                <div className={s.pieceBody}>
+                  <p className={s.lead}>{piece.lead}</p>
+                  <ul className={s.checks}>
+                    {piece.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+
+                  {piece.id === "motion" && (
+                    <div className={s.demo}>
+                      <p className={s.demoLabel}>This bar fills with your scroll position — CSS only, no JavaScript</p>
+                      <div className={s.demoTrack}>
+                        <span className={s.demoFill} />
+                      </div>
+                    </div>
+                  )}
+
+                  {piece.sample && (
+                    <figure className={s.sample}>
+                      <figcaption>
+                        <span>{piece.sample.caption}</span>
+                        <span className={s.lang}>{piece.sample.language}</span>
+                      </figcaption>
+                      <pre>
+                        <code>{piece.sample.body}</code>
+                      </pre>
+                    </figure>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -375,7 +444,7 @@ export function InteractiveSite() {
             </div>
             <dl className={s.index}>
               {toolkit.map((row) => (
-                <div key={row.field} className={s.indexRow}>
+                <div key={row.field} className={cx(s.indexRow, s.reveal)}>
                   <dt>{row.field}</dt>
                   <dd>{row.detail}</dd>
                 </div>
@@ -390,7 +459,7 @@ export function InteractiveSite() {
               <div>
                 <h2>Say hello</h2>
                 <p className={s.lede}>
-                  Happy to talk about NetSuite customisation, integrations, or anything data. I read every message.
+                  Open to NetSuite work, data projects and interesting web problems. I read every message.
                 </p>
                 <div className={s.actions}>
                   <button type="button" className={s.primary} onClick={copyEmail}>
@@ -430,9 +499,7 @@ export function InteractiveSite() {
           <span>
             © <span suppressHydrationWarning>{year}</span> {profile.name}
           </span>
-          <span>
-            <a href="/versions/">Other versions of this site</a>
-          </span>
+          <span>Built with Next.js, TypeScript and CSS scroll-driven animation</span>
         </div>
       </footer>
 

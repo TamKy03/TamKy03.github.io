@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
-import s from "./interactive.module.css";
+import s from "./portfolio.module.css";
 
 export type Command = { label: string; hint: string; run: () => void };
 

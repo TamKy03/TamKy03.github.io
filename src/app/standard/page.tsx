@@ -1,11 +1,12 @@
-import { StandardSite } from "@/components/standard/StandardSite";
-import { pageMetadata } from "@/content/site";
+import type { Metadata } from "next";
+import { Redirect } from "@/components/Redirect";
 
-export const metadata = pageMetadata({
-  title: "Tam Kok Yan — NetSuite Technical Consultant",
-  path: "/standard/",
-});
+export const metadata: Metadata = {
+  title: "Tam Kok Yan",
+  robots: { index: false },
+  alternates: { canonical: "/" },
+};
 
-export default function StandardPage() {
-  return <StandardSite />;
+export default function RedirectPage() {
+  return <Redirect to="/" />;
 }

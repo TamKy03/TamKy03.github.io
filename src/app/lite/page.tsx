@@ -1,11 +1,12 @@
-import { LiteSite } from "@/components/lite/LiteSite";
-import { pageMetadata } from "@/content/site";
+import type { Metadata } from "next";
+import { Redirect } from "@/components/Redirect";
 
-export const metadata = pageMetadata({
-  title: "Tam Kok Yan — Resume",
-  path: "/lite/",
-});
+export const metadata: Metadata = {
+  title: "Tam Kok Yan",
+  robots: { index: false },
+  alternates: { canonical: "/" },
+};
 
-export default function LitePage() {
-  return <LiteSite />;
+export default function RedirectPage() {
+  return <Redirect to="/" />;
 }

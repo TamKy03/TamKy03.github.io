@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { HawkerPage } from "@/components/hawker/HawkerPage";
-import { hawker } from "@/content/hawker";
+import { Redirect } from "@/components/Redirect";
 
 export const metadata: Metadata = {
-  title: `${hawker.name} — Demo order page (Intermediate)`,
-  description: `Demo F&B page with one-tap GrabFood and WhatsApp ordering, using ${hawker.name} as a sample.`,
-  robots: { index: false, follow: false },
-  alternates: { canonical: "/demo/hawker/intermediate/" },
+  title: "Tam Kok Yan",
+  robots: { index: false },
+  alternates: { canonical: "/" },
 };
 
-export default function HawkerIntermediatePage() {
-  return <HawkerPage />;
+export default function RedirectPage() {
+  return <Redirect to="/" />;
 }

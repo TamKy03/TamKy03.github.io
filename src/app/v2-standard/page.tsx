@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Redirect } from "@/components/Redirect";
 
 export const metadata: Metadata = {
-  title: "Tam Kok Yan — NetSuite Technical Consultant",
+  title: "Tam Kok Yan",
   robots: { index: false },
-  alternates: { canonical: "/standard/" },
+  alternates: { canonical: "/" },
 };
 
-export default function OldStandardPage() {
-  return <Redirect to="/standard/" />;
+export default function RedirectPage() {
+  return <Redirect to="/" />;
 }
