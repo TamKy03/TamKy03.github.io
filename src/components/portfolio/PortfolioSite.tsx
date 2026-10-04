@@ -61,6 +61,13 @@ const filters: { key: Filter; label: string }[] = [
   { key: "campus", label: "Campus" },
 ];
 
+// Two columns that have to agree: a requirement on the left, what it becomes on the right.
+const reconcile = [
+  { in: "A requirement written in business language", out: "SuiteScript 2.1 that validates, routes and posts" },
+  { in: "A million rows waiting in a saved search", out: "An export delivered inside the overnight window" },
+  { in: "A degree in data science", out: "Numbers judged against the cost of being wrong" },
+];
+
 const toolkit = [
   { field: "NetSuite", detail: netsuiteSkills.join(", ") },
   { field: "Integration & engineering", detail: integrationSkills.join(", ") },
@@ -303,7 +310,11 @@ export function PortfolioSite() {
                   <br />
                   Kok&nbsp;Yan
                 </h1>
-                <span className={s.highlight} aria-hidden="true" />
+                <p className={s.recordLine}>
+                  <span>Rec · {profile.title}</span>
+                  <span>{profile.location}</span>
+                  <span>Since Nov 2024</span>
+                </p>
                 <p className={s.lede}>
                   NetSuite technical consultant with a data science degree. I write the SuiteScript behind
                   Order-to-Cash and Procure-to-Pay, build integrations that move a million records a night, and build
@@ -348,12 +359,52 @@ export function PortfolioSite() {
                 <span className={s.figure}>CGPA {degree.cgpa}</span>
               </div>
             </dl>
+
+            {/* Reconciliation: pick what comes in, the column on the right shows what comes out.
+                The radio is the entire mechanism — the CSS reads :checked, nothing else runs. */}
+            <div className={s.reconcile} role="group" aria-label="What comes in, what goes out">
+              {reconcile.map((pair, i) => (
+                <input
+                  key={pair.in}
+                  type="radio"
+                  name="reconcile"
+                  id={`rec-${i}`}
+                  defaultChecked={i === 0}
+                />
+              ))}
+              <div className={s.recGrid}>
+                <div className={s.recSide}>
+                  <p className={s.rail}>What comes in</p>
+                  {reconcile.map((pair, i) => (
+                    <label key={pair.in} htmlFor={`rec-${i}`} data-k={i}>
+                      {pair.in}
+                    </label>
+                  ))}
+                </div>
+                <div className={cx(s.recSide, s.recOut)}>
+                  <p className={s.rail}>What goes out</p>
+                  {reconcile.map((pair, i) => (
+                    <p key={pair.out} data-k={i}>
+                      {pair.out}
+                    </p>
+                  ))}
+                </div>
+              </div>
+              <p className={s.recFoot}>
+                <span>
+                  Overnight batch <span className={s.tally} aria-hidden="true" />
+                </span>
+                <span>1,000,000 records</span>
+                <span>17:00 – 02:00</span>
+              </p>
+            </div>
           </div>
         </section>
 
         <section id="record" className={s.section}>
           <div className={s.shell}>
             <div className={s.sectionHead}>
+              <p className={s.rail}>§ 01 / Record</p>
               <h2>The record</h2>
               <div className={s.filters} role="group" aria-label="Filter the record">
                 {filters.map((f) => (
@@ -371,13 +422,16 @@ export function PortfolioSite() {
             </div>
 
             <ol className={s.ledger}>
-              {visibleEntries.map((entry) => (
+              {visibleEntries.map((entry, i) => (
                 <li
                   key={entry.id}
                   className={cx(s.entry, s.reveal)}
                   style={{ "--vt": `row-${entry.id}` } as CSSProperties}
                 >
-                  <div className={s.when}>{entry.when}</div>
+                  <div className={s.when}>
+                    <span className={s.railId}>Rec {String(i + 1).padStart(2, "0")}</span>
+                    {entry.when}
+                  </div>
                   <div className={s.entryBody}>
                     <h3>{entry.title}</h3>
                     <p className={s.where}>{entry.where}</p>
@@ -390,19 +444,30 @@ export function PortfolioSite() {
           </div>
         </section>
 
-        <section id="craft" className={s.section}>
+        {/* The night ground: this is the work that runs while the office is closed */}
+        <section id="craft" className={cx(s.section, s.night)}>
           <div className={s.shell}>
             <div className={s.sectionHead}>
+              <p className={s.rail}>§ 02 / Craft</p>
               <h2>Craft</h2>
-              <p className={s.sectionNote}>What I care about technically, and the code behind each piece.</p>
+              <p className={s.sectionNote}>Open a record to read the code behind it.</p>
             </div>
 
-            {craft.map((piece) => (
-              <article key={piece.id} id={piece.id} className={cx(s.piece, s.reveal)}>
-                <div className={s.pieceHead}>
-                  <span className={s.kicker}>{piece.kicker}</span>
+            {craft.map((piece, i) => (
+              <details
+                key={piece.id}
+                id={piece.id}
+                className={cx(s.piece, s.reveal)}
+                open={i === 0}
+              >
+                <summary className={s.pieceHead}>
+                  <span className={s.rail}>
+                    {String(i + 1).padStart(2, "0")} / {piece.kicker}
+                    {piece.flag && <span className={s.flag}> · {piece.flag}</span>}
+                  </span>
                   <h3>{piece.title}</h3>
-                </div>
+                  <span className={s.pieceState} aria-hidden="true" />
+                </summary>
                 <div className={s.pieceBody}>
                   <p className={s.lead}>{piece.lead}</p>
                   <ul className={s.checks}>
@@ -410,6 +475,13 @@ export function PortfolioSite() {
                       <li key={point}>{point}</li>
                     ))}
                   </ul>
+
+                  {piece.shift && (
+                    <div className={s.shift}>
+                      <p className={s.was}>{piece.shift.was}</p>
+                      <p className={s.now}>{piece.shift.now}</p>
+                    </div>
+                  )}
 
                   {piece.id === "motion" && (
                     <div className={s.demo}>
@@ -432,7 +504,7 @@ export function PortfolioSite() {
                     </figure>
                   )}
                 </div>
-              </article>
+              </details>
             ))}
           </div>
         </section>
@@ -440,6 +512,7 @@ export function PortfolioSite() {
         <section id="toolkit" className={s.section}>
           <div className={s.shell}>
             <div className={s.sectionHead}>
+              <p className={s.rail}>§ 03 / Toolkit</p>
               <h2>What I work with</h2>
             </div>
             <dl className={s.index}>
@@ -457,6 +530,7 @@ export function PortfolioSite() {
           <div className={s.shell}>
             <div className={s.signoff}>
               <div>
+                <p className={s.rail}>§ 04 / Contact</p>
                 <h2>Say hello</h2>
                 <p className={s.lede}>
                   Open to NetSuite work, data projects and interesting web problems. I read every message.

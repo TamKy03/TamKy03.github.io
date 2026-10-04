@@ -8,14 +8,29 @@ files and hosted on GitHub Pages.
 
 ## The site
 
-One page, four sections:
+The page is set as a record: a mono field id in the left rail, prose hanging right of it, figures
+tabular in the right column. Two grounds only — paper for the day, near-black for the work that
+runs unattended.
 
 | Section | What it holds |
 | --- | --- |
-| Hero | Name, portrait, and a statement table of the four facts that matter |
-| The record | Work, study and campus history as ledger rows, filterable |
-| Craft | Motion, interaction, data & AI, NetSuite and web — each with a code sample |
+| Hero | Name, portrait, a statement table, and a reconciliation: what comes in against what goes out |
+| The record | Work, study and campus history as record rows, filterable |
+| Craft | Motion, interaction, data & AI, NetSuite and web — each one a record you open, on the night ground |
 | Say hello | Copy-email button, LinkedIn, and a contact form that opens your mail app |
+
+## Interaction, built from the platform
+
+Nothing here is a JavaScript widget:
+
+- **Reconciliation** — a radio group and `:checked` sibling selectors. Choosing an input re-weights
+  the output it produces. No state, no handler.
+- **The overnight batch counter** — `@property --tally` typed as an `<integer>`, animated on a
+  `view()` timeline and printed with a CSS counter. The browser animates the number; nothing
+  measures the page or increments anything in script.
+- **Craft pieces** — native `<details>`, with `:has()` marking a record that has been opened.
+- **Filtering the record** — the View Transitions API tweens the rows the browser already has.
+- **Command palette** — `Ctrl`/`Cmd` + `K`, with full keyboard navigation.
 
 Older addresses (`/standard/`, `/lite/`, `/versions/`, `/v1-lite/`, `/v2-standard/`,
 `/v3-interactive/`, `/demo/hawker/…`) redirect to the home page so previously shared links keep
@@ -29,7 +44,7 @@ page:
 
 - `animation-timeline: scroll(root block)` drives the reading progress rule
 - `animation-timeline: view()` with `animation-range` reveals rows as they enter the viewport
-- `@property` types the custom property the sweep animates
+- `@property` types the custom properties that are animated, including the batch counter
 - The View Transitions API animates the record list when a filter changes
   (`document.startViewTransition` + `flushSync`)
 - `@supports not (animation-timeline: view())` hands older browsers the finished state

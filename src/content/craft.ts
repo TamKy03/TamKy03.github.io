@@ -9,6 +9,10 @@ export type Craft = {
   title: string;
   lead: string;
   points: string[];
+  // The line this piece replaced, and the line that replaced it
+  shift?: { was: string; now: string };
+  // Set only where the subject of the piece is a captured failure
+  flag?: string;
   sample?: CodeSample;
 };
 
@@ -18,6 +22,10 @@ export const craft: Craft[] = [
     kicker: "Motion",
     title: "Animation the browser drives",
     lead: "Every animation on this page is declared in CSS and run by the browser's compositor. There is no scroll listener, no element measuring, no requestAnimationFrame loop — so the work happens off the main thread and keeps running while JavaScript is busy.",
+    shift: {
+      was: "scroll listener measures the element, then sets a style every frame",
+      now: "animation-timeline: view() - the browser owns the timeline",
+    },
     points: [
       "Scroll timelines (scroll() and view()) tie progress to the scroll position itself",
       "Rows reveal as they enter the viewport without an IntersectionObserver",
@@ -52,6 +60,10 @@ export const craft: Craft[] = [
     kicker: "Interaction",
     title: "State changes with View Transitions",
     lead: "Filtering the record above does not cut from one list to the next. The browser snapshots both states and tweens between them through the View Transitions API, so rows that stay keep their place while the rest fade.",
+    shift: {
+      was: "rebuild the list, then animate each row from measured coordinates",
+      now: "document.startViewTransition() - the browser tweens both states",
+    },
     points: [
       "One call wraps the state update; the browser owns the animation",
       "Shared elements are matched by view-transition-name",
@@ -76,6 +88,10 @@ export const craft: Craft[] = [
     kicker: "Data & AI",
     title: "A data science degree, pointed at business systems",
     lead: "My bachelor's is in data science, and the habits carry straight into ERP work: define the question before the model, know what the data actually measures, and be honest about error. Inside NetSuite that means saved searches and SuiteQL become datasets, and the interesting problems are matching, classification and anomaly detection on transactions.",
+    shift: {
+      was: "report the accuracy and call the model good",
+      now: "weigh precision against recall at the cost of a wrong decision",
+    },
     points: [
       "Framing: what decision does this prediction change, and what does a wrong answer cost?",
       "Data: joins and grain are where most ERP reporting goes wrong, long before modelling",
@@ -100,6 +116,11 @@ cost      = 12 * false_positives + 400 * false_negatives`,
     kicker: "NetSuite",
     title: "SuiteScript that survives production",
     lead: "Day to day I build customisation, automation and integrations on Oracle NetSuite across Order-to-Cash and Procure-to-Pay. The patterns below are the ones I reach for: keep the transaction safe, keep governance in budget, keep the data model honest.",
+    flag: "Exception captured",
+    shift: {
+      was: "the posting stops and the user reads a stack trace",
+      now: "the exception is written to its own record and the batch continues",
+    },
     points: [
       "Exceptions are routed to a queryable custom record, so a failure never blocks the posting",
       "High-volume work runs as Map/Reduce with date-based chunking, inside governance limits",
@@ -136,6 +157,10 @@ define(['N/record', 'N/log'], (record, log) => {
     kicker: "Web",
     title: "How this site is built",
     lead: "This page is the work sample for the web half: a statically exported Next.js app in TypeScript, deployed from a GitHub Actions workflow on every push. No analytics, no cookie banner, no third-party scripts.",
+    shift: {
+      was: "ship a framework bundle to animate a static page",
+      now: "static export, no runtime dependency, motion declared in CSS",
+    },
     points: [
       "Next.js App Router, exported to plain files — nothing runs on a server",
       "TypeScript throughout, with the type check gating every deploy",

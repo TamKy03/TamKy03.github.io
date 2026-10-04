@@ -1,4 +1,7 @@
-/* "The Ledger" portfolio: ruled rows, figures in the right column, one yellow rule.
+/* "The Record": every block is a record — a mono field id in the left rail, prose hanging
+   right of it, figures tabular in the right column. Two grounds only: paper for the day,
+   near-black for work that runs unattended. Red means an exception was captured; green means
+   this is the line that replaced the one above it.
    All motion is declared here and run by the browser — scroll timelines, not JavaScript. */
 
 @property --sweep {
@@ -7,26 +10,57 @@
   initial-value: 0%;
 }
 
+/* A real typed integer, so the browser can animate a number the page then prints */
+@property --tally {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .root {
-  --paper: #edece4;
-  --paper-2: #e5e3d9;
-  --ink: #16181b;
-  --ink-soft: #585e62;
-  --rule: #cfcbbd;
-  --highlight: #f4d442;
-  min-height: 100vh;
+  --paper: #f1efe7;
+  --paper-2: #e9e6dc;
+  --ink: #15171a;
+  --ink-soft: #5a6065;
+  --rule: #d2cec0;
+  --accent: #8a5a14;
+  --exception: #a32b1c;
+  --added: #1a6b4a;
+  min-height: 100dvh;
   background: var(--paper);
   color: var(--ink);
   font: 400 1rem/1.6 var(--font-text), system-ui, sans-serif;
   font-synthesis-weight: none;
 }
 
-.root[data-theme="dark"] {
-  --paper: #14161a;
-  --paper-2: #1a1d22;
-  --ink: #eceae1;
-  --ink-soft: #9aa0a4;
-  --rule: #2e3237;
+/* The night ground. Scoped tokens, so everything inside simply follows. */
+.root[data-theme="dark"],
+.root .night {
+  --paper: #101418;
+  --paper-2: #171c21;
+  --ink: #e9e7dd;
+  --ink-soft: #99a0a4;
+  --rule: #2b3137;
+  --accent: #d9a43a;
+  --exception: #e4705c;
+  --added: #6fbf96;
+}
+
+/* With the whole page on the night ground, the unattended section inverts instead */
+.root[data-theme="dark"] .night {
+  --paper: #f1efe7;
+  --paper-2: #e9e6dc;
+  --ink: #15171a;
+  --ink-soft: #5a6065;
+  --rule: #d2cec0;
+  --accent: #8a5a14;
+  --exception: #a32b1c;
+  --added: #1a6b4a;
+}
+
+.night {
+  background: var(--paper);
+  color: var(--ink);
 }
 
 :where(.root) h1,
@@ -61,7 +95,7 @@
   position: fixed;
   inset: 0 0 auto 0;
   height: 3px;
-  background: var(--highlight);
+  background: var(--accent);
   transform-origin: 0 50%;
   scale: 0 1;
   z-index: 60;
@@ -102,6 +136,11 @@
   }
   .progress {
     display: none;
+  }
+  /* No scroll timeline: print the finished figure rather than a stuck zero */
+  .tally {
+    --tally: 100;
+    animation: none;
   }
 }
 
@@ -203,14 +242,16 @@
   letter-spacing: -0.02em;
 }
 
-/* The one deliberate load moment: the highlighter wipes in under the name */
-.highlight {
-  display: block;
-  height: clamp(10px, 1.6vw, 18px);
-  margin: 10px 0 26px;
-  background: var(--highlight);
-  transform-origin: left center;
-  animation: sweep 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 180ms both;
+/* The record's own header line, in place of a decorative band */
+.recordLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.4rem;
+  margin: 14px 0 24px;
+  font: 500 0.74rem var(--font-figure), monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .lede {
@@ -282,18 +323,138 @@
   text-align: right;
 }
 
+/* Reconciliation: two columns that have to agree. Pure CSS state — the radio is the logic. */
+.reconcile {
+  margin: clamp(32px, 5vw, 64px) 0 0;
+  border-top: 2px solid var(--ink);
+  padding-top: 20px;
+}
+
+.reconcile > input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.recGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 56px);
+}
+
+.recSide {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.recSide label,
+.recSide p {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  margin: 0;
+  padding: 6px 0;
+  font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.recSide label {
+  cursor: pointer;
+}
+
+.recOut {
+  text-align: right;
+}
+
+.recOut p {
+  justify-content: flex-end;
+}
+
+/* The chosen input and the output it produces are the only two lines at full weight */
+.reconcile > input:nth-of-type(1):checked ~ .recGrid [data-k="0"],
+.reconcile > input:nth-of-type(2):checked ~ .recGrid [data-k="1"],
+.reconcile > input:nth-of-type(3):checked ~ .recGrid [data-k="2"] {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.reconcile > input:nth-of-type(1):checked ~ .recGrid .recOut [data-k="0"],
+.reconcile > input:nth-of-type(2):checked ~ .recGrid .recOut [data-k="1"],
+.reconcile > input:nth-of-type(3):checked ~ .recGrid .recOut [data-k="2"] {
+  color: var(--accent);
+}
+
+.reconcile > input:nth-of-type(1):focus-visible ~ .recGrid label[data-k="0"],
+.reconcile > input:nth-of-type(2):focus-visible ~ .recGrid label[data-k="1"],
+.reconcile > input:nth-of-type(3):focus-visible ~ .recGrid label[data-k="2"] {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.recFoot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.4rem;
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  font: 500 0.78rem var(--font-figure), monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The number is animated by the browser as a typed integer, then printed as a counter.
+   Nothing measures the page; nothing increments it in JavaScript. */
+.tally {
+  counter-reset: tally var(--tally);
+  color: var(--accent);
+  animation: tick linear both;
+  animation-timeline: view();
+  animation-range: entry 25% cover 75%;
+}
+
+.tally::after {
+  content: counter(tally) "%";
+}
+
+@keyframes tick {
+  to {
+    --tally: 100;
+  }
+}
+
 /* Sections */
 .section {
   padding: clamp(48px, 8vw, 104px) 0 0;
 }
 
+.night.section {
+  margin-top: clamp(48px, 8vw, 104px);
+  padding-bottom: clamp(48px, 8vw, 96px);
+}
+
 .sectionHead {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) auto;
   align-items: baseline;
-  justify-content: space-between;
   gap: 16px;
   padding-bottom: 18px;
+}
+
+/* The rail: a mono field id, hanging left of everything it describes */
+.rail {
+  margin: 0;
+  font: 500 0.72rem/1.9 var(--font-figure), monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
 }
 
 .sectionHead h2 {
@@ -306,7 +467,8 @@
 .sectionNote {
   margin: 0;
   color: var(--ink-soft);
-  max-width: 48ch;
+  max-width: 34ch;
+  font-size: 0.95rem;
 }
 
 .filters {
@@ -357,10 +519,29 @@
 }
 
 .when {
+  display: grid;
+  align-content: start;
+  gap: 4px;
   font: 400 0.85rem/1.5 var(--font-figure), monospace;
   font-variant-numeric: tabular-nums;
   color: var(--ink-soft);
   padding-top: 4px;
+}
+
+.railId {
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  transition: color 0.15s;
+}
+
+/* Reading a record marks it: :has() watches the row's own disclosure state */
+.entry:hover .railId,
+.entry:focus-within .railId,
+.entry:has(details[open]) .railId {
+  color: var(--accent);
 }
 
 .entryBody h3 {
@@ -436,12 +617,8 @@
   margin: 0 0 16px;
 }
 
-/* Craft */
+/* Craft: each piece is a record you open. Native disclosure — no script, no height maths. */
 .piece {
-  display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
-  gap: 24px;
-  padding: 26px 0 32px;
   border-top: 1px solid var(--rule);
   scroll-margin-top: 76px;
 }
@@ -450,17 +627,51 @@
   border-top: 2px solid var(--ink);
 }
 
-.kicker {
-  display: block;
-  font: 400 0.78rem var(--font-figure), monospace;
-  color: var(--ink-soft);
-  margin-bottom: 6px;
+.pieceHead {
+  display: grid;
+  grid-template-columns: 14rem minmax(0, 1fr) 1.5rem;
+  gap: 24px;
+  align-items: baseline;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.pieceHead::-webkit-details-marker {
+  display: none;
 }
 
 .pieceHead h3 {
   font-family: var(--font-display), Georgia, serif;
-  font-size: 1.75rem;
+  font-size: clamp(1.45rem, 2.6vw, 1.9rem);
   line-height: 1.05;
+}
+
+.piece:hover .pieceHead h3,
+.piece[open] .pieceHead h3 {
+  color: var(--ink);
+}
+
+.pieceState {
+  font: 400 1.15rem var(--font-figure), monospace;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+.pieceState::after {
+  content: "+";
+}
+
+.piece[open] .pieceState::after {
+  content: "–";
+}
+
+.piece[open] .rail {
+  color: var(--accent);
+}
+
+.pieceBody {
+  padding: 0 0 32px calc(14rem + 24px);
 }
 
 .lead {
@@ -486,8 +697,44 @@
   content: "—";
   position: absolute;
   left: 0;
-  color: var(--highlight);
+  color: var(--accent);
   font-weight: 600;
+}
+
+/* Before / after, where the content is a change: the replaced line, then the line that replaced it */
+.shift {
+  display: grid;
+  gap: 2px;
+  margin: 18px 0 0;
+  font: 400 0.9rem/1.6 var(--font-figure), monospace;
+  max-width: 72ch;
+}
+
+.shift p {
+  margin: 0;
+  padding-left: 2.2ch;
+  text-indent: -2.2ch;
+}
+
+.was {
+  color: var(--ink-soft);
+}
+
+.was::before {
+  content: "− ";
+}
+
+.now {
+  color: var(--added);
+}
+
+.now::before {
+  content: "+ ";
+}
+
+/* An exception is the one thing on the page allowed to be red */
+.flag {
+  color: var(--exception);
 }
 
 /* Live demo of a scroll-driven animation */
@@ -513,7 +760,7 @@
 .demoFill {
   display: block;
   height: 100%;
-  background: var(--highlight);
+  background: var(--accent);
   transform-origin: left center;
   scale: 0 1;
   animation: sweep linear both;
@@ -622,9 +869,9 @@
 }
 
 .primary:hover {
-  background: var(--highlight);
-  border-color: var(--highlight);
-  color: #16181b;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--paper);
 }
 
 .secondary {
@@ -807,13 +1054,39 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 6px;
   }
+  .when {
+    grid-auto-flow: column;
+    justify-content: start;
+    gap: 12px;
+    align-items: baseline;
+  }
   .entryFigure {
     text-align: left;
     padding-top: 0;
   }
-  .piece {
+  .sectionHead {
     grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+    gap: 10px;
+  }
+  .pieceHead {
+    grid-template-columns: minmax(0, 1fr) 1.5rem;
+    gap: 6px 16px;
+  }
+  .pieceHead .rail {
+    grid-column: 1 / -1;
+  }
+  .pieceBody {
+    padding-left: 0;
+  }
+  .recGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .recOut {
+    text-align: left;
+  }
+  .recOut p {
+    justify-content: flex-start;
   }
   .indexRow {
     grid-template-columns: minmax(0, 1fr);
@@ -834,7 +1107,8 @@
     opacity: 1;
     translate: none;
   }
-  .highlight {
+  .tally {
+    --tally: 100;
     animation: none;
   }
   .toast {
