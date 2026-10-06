@@ -13,6 +13,7 @@ import {
 import { flushSync } from "react-dom";
 import { ledgerFonts } from "@/app/fonts";
 import { useReducedMotion } from "@/components/hooks";
+import { Onward } from "@/components/labs/Onward";
 import { craft } from "@/content/craft";
 import {
   codeInstructor,
@@ -48,10 +49,12 @@ type Entry = {
 };
 
 const navLinks = [
-  { id: "record", label: "Record" },
-  { id: "craft", label: "Craft" },
-  { id: "toolkit", label: "Toolkit" },
-  { id: "contact", label: "Contact" },
+  { href: "#record", label: "Record" },
+  { href: "#craft", label: "Craft" },
+  { href: "/netsuite/", label: "NetSuite" },
+  { href: "/cs/", label: "Computer science" },
+  { href: "/lab/", label: "Puzzles" },
+  { href: "#contact", label: "Contact" },
 ];
 
 const filters: { key: Filter; label: string }[] = [
@@ -65,13 +68,13 @@ const filters: { key: Filter; label: string }[] = [
 const reconcile = [
   { in: "A requirement written in business language", out: "SuiteScript 2.1 that validates, routes and posts" },
   { in: "A million rows waiting in a saved search", out: "An export delivered inside the overnight window" },
-  { in: "A degree in data science", out: "Numbers judged against the cost of being wrong" },
+  { in: "A degree in data science", out: "Thresholds set from what each kind of mistake costs" },
 ];
 
 const toolkit = [
   { field: "NetSuite", detail: netsuiteSkills.join(", ") },
   { field: "Integration & engineering", detail: integrationSkills.join(", ") },
-  { field: "Data & AI", detail: "Python, SQL, statistics, model evaluation — BCS (Hons) Data Science, TARUMT" },
+  { field: "Data & AI", detail: "Python, SQL, statistics and model evaluation, from a BCS (Hons) in Data Science at TARUMT" },
   { field: "Web", detail: "TypeScript, React, Next.js, CSS scroll-driven animation, View Transitions, accessibility" },
   { field: "Languages", detail: spokenLanguages.join(", ") },
 ];
@@ -179,6 +182,9 @@ export function PortfolioSite() {
       { label: "Show work only", hint: "filter", run: () => { applyFilter("work"); goTo("record"); } },
       { label: "Show study only", hint: "filter", run: () => { applyFilter("education"); goTo("record"); } },
       { label: "Show campus roles", hint: "filter", run: () => { applyFilter("campus"); goTo("record"); } },
+      { label: "Open the NetSuite tools", hint: "page", run: () => { window.location.href = "/netsuite/"; } },
+      { label: "Open the computer science page", hint: "page", run: () => { window.location.href = "/cs/"; } },
+      { label: "Open the SuiteScript puzzles", hint: "page", run: () => { window.location.href = "/lab/"; } },
       { label: "Copy email address", hint: "action", run: copyEmail },
       { label: "Open LinkedIn", hint: "link", run: () => window.open(profile.linkedin, "_blank", "noopener") },
       { label: "Switch paper / ink", hint: "action", run: toggleTheme },
@@ -284,7 +290,7 @@ export function PortfolioSite() {
           </a>
           <nav className={s.nav} aria-label="Primary">
             {navLinks.map((link) => (
-              <a key={link.id} href={`#${link.id}`}>
+              <a key={link.href} href={link.href}>
                 {link.label}
               </a>
             ))}
@@ -316,9 +322,9 @@ export function PortfolioSite() {
                   <span>Since Nov 2024</span>
                 </p>
                 <p className={s.lede}>
-                  NetSuite technical consultant with a data science degree. I write the SuiteScript behind
-                  Order-to-Cash and Procure-to-Pay, build integrations that move a million records a night, and build
-                  for the web in my own time — this page included.
+                  I am a NetSuite technical consultant with a data science degree. At work I write the SuiteScript
+                  behind Order-to-Cash and Procure-to-Pay, and the integrations that move about a million records a
+                  night. I build for the web in my own time, including this page.
                 </p>
               </div>
 
@@ -485,7 +491,7 @@ export function PortfolioSite() {
 
                   {piece.id === "motion" && (
                     <div className={s.demo}>
-                      <p className={s.demoLabel}>This bar fills with your scroll position — CSS only, no JavaScript</p>
+                      <p className={s.demoLabel}>This bar fills with your scroll position. CSS only, no JavaScript.</p>
                       <div className={s.demoTrack}>
                         <span className={s.demoFill} />
                       </div>
@@ -533,7 +539,7 @@ export function PortfolioSite() {
                 <p className={s.rail}>§ 04 / Contact</p>
                 <h2>Say hello</h2>
                 <p className={s.lede}>
-                  Open to NetSuite work, data projects and interesting web problems. I read every message.
+                  Open to NetSuite work, data projects and web problems. I read everything that comes in.
                 </p>
                 <div className={s.actions}>
                   <button type="button" className={s.primary} onClick={copyEmail}>
@@ -566,6 +572,9 @@ export function PortfolioSite() {
             </div>
           </div>
         </section>
+        <div className={s.shell}>
+          <Onward current="/" />
+        </div>
       </main>
 
       <footer className={s.footer}>

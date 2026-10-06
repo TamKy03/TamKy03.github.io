@@ -192,6 +192,11 @@
   border-bottom-color: var(--ink);
 }
 
+.nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
 .tools {
   display: flex;
   gap: 8px;
@@ -919,6 +924,12 @@
 }
 
 /* Footer */
+.footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
 .footer {
   margin-top: clamp(48px, 8vw, 104px);
   border-top: 1px solid var(--rule);
@@ -1022,8 +1033,22 @@
 }
 
 @media (max-width: 860px) {
+  /* The nav stays: there are four pages now, and the phone needs them too */
+  .masthead .shell {
+    flex-wrap: wrap;
+    padding-bottom: 6px;
+  }
   .nav {
-    display: none;
+    order: 3;
+    width: 100%;
+    gap: 18px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav a {
+    min-height: 44px;
+    font-size: 0.86rem;
+    white-space: nowrap;
   }
   .shell {
     width: min(1140px, 100% - 32px);
