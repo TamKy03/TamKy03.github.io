@@ -110,7 +110,7 @@
 }
 
 .step {
-  min-width: 44px;
+  min-width: 42px;
   min-height: 44px;
   border: 1px solid var(--rule);
   background: transparent;
@@ -132,7 +132,7 @@
 
 /* Type the number straight in, or step it */
 .countInput {
-  width: 4.2rem;
+  width: 3.8rem;
   min-height: 44px;
   padding: 0 6px;
   border: 1px solid var(--rule);
@@ -211,7 +211,7 @@
 
 .tableRow {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 6rem 9rem;
+  grid-template-columns: minmax(0, 1fr) 5rem 10rem;
   gap: 12px;
   align-items: baseline;
   padding: 10px 0;
@@ -527,7 +527,35 @@
     gap: 8px;
   }
   .tableRow {
-    grid-template-columns: minmax(0, 1fr) 4rem 8rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "call call"
+      "units times";
+    row-gap: 6px;
+  }
+  .tableRow > span:nth-child(1) {
+    grid-area: call;
+  }
+  .tableRow > span:nth-child(2) {
+    grid-area: units;
+    text-align: left;
+  }
+  .tableRow > span:nth-child(3) {
+    grid-area: times;
+  }
+  /* Each row says what it is, so the header has nothing left to add */
+  .tableHead {
+    display: none;
+  }
+  /* Stacked, the limit figure loses its column header, so it says what it is */
+  .row > .count:not(:empty)::before {
+    content: "Limit ";
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .tableRow > span:nth-child(2)::after {
+    content: " units each";
+    letter-spacing: 0.08em;
   }
 }
 
