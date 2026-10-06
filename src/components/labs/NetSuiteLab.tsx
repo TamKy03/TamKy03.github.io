@@ -99,8 +99,10 @@ function GovernanceBudget() {
   const used = Math.min(100, Math.round((total / scriptType.limit) * 100));
   const over = total > scriptType.limit;
   const headroom = scriptType.limit - total;
-  const bump = (id: string, by: number) =>
-    setCounts((c) => ({ ...c, [id]: Math.max(0, Math.min(99, (c[id] ?? 0) + by)) }));
+  const clamp = (n: number) => Math.max(0, Math.min(999, Number.isFinite(n) ? Math.round(n) : 0));
+  const bump = (id: string, by: number) => setCounts((c) => ({ ...c, [id]: clamp((c[id] ?? 0) + by) }));
+  const setCount = (id: string, value: string) =>
+    setCounts((c) => ({ ...c, [id]: value === "" ? 0 : clamp(Number(value)) }));
 
   return (
     <section className={a.app}>
@@ -173,7 +175,17 @@ function GovernanceBudget() {
                   >
                     −
                   </button>
-                  <span className={a.count}>{counts[op.id] ?? 0}</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    className={a.countInput}
+                    value={counts[op.id] ?? 0}
+                    min={0}
+                    max={999}
+                    onChange={(e) => setCount(op.id, e.target.value)}
+                    onFocus={(e) => e.target.select()}
+                    aria-label={`How many times ${op.call} runs`}
+                  />
                   <button
                     type="button"
                     className={a.step}

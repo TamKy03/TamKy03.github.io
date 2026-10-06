@@ -130,6 +130,23 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Type the number straight in, or step it */
+.countInput {
+  width: 4.2rem;
+  min-height: 44px;
+  padding: 0 6px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  font: 500 0.95rem var(--font-figure), monospace;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.countInput:focus {
+  border-color: var(--ink);
+}
+
 .slider {
   width: 100%;
   accent-color: var(--accent);
